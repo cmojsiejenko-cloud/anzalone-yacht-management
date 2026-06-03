@@ -40,3 +40,5 @@ yarn-error.log*
 # local share packages
 *.zip
 Anzalone-Website-Preview.zip
+lighthouse-report.json
+lighthouse-report2.json
