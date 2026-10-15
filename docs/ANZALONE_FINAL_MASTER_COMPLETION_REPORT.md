@@ -69,7 +69,8 @@ Production build: homepage **2.52 kB** route JS / **~113 kB** first load. Fresh 
 ## N. Production deployment URL and status
 
 - **Intended URL:** https://anzalone-yacht-management.vercel.app  
-- **Status:** See `docs/ANZALONE_PRODUCTION_DEPLOYMENT_REPORT.md` — CLI login blocked; git-based deploy used when push succeeds. Pre-push live site still showed prior revision.
+- **Git:** Commit `02763c3` pushed to `origin/main` successfully.  
+- **Live cutover:** **Not yet live** — production still serves a prior cached deployment (`X-Vercel-Cache: HIT`, multi-day Age; `info@anzaloneyacht.com`). Vercel CLI auth missing; Git auto-deploy did not refresh production. Owner must redeploy from the Vercel dashboard (see deployment report).
 
 ## O. Email delivery verification status
 

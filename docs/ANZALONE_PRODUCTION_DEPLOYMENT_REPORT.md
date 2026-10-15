@@ -30,14 +30,24 @@
 
 ## Deployment action taken
 
-If a commit is pushed to `origin/main` and the GitHub repo remains linked to the existing Vercel project, Vercel should auto-build production.
+| Step | Result |
+|------|--------|
+| Commit | `02763c3` — *Ship official Anzalone branding, heritage narrative, and production polish.* |
+| `git push origin main` | **Succeeded** (`94a5a92..02763c3`) |
+| Auto-deploy to Vercel | **Not observed** — as of post-push checks, https://anzalone-yacht-management.vercel.app still served the prior build (`info@anzaloneyacht.com`, older homepage). Likely causes: Vercel project not linked to this GitHub repo, deploy paused, or build failed in the dashboard. |
+| CLI `vercel --prod` | **Blocked** — no Vercel login / `VERCEL_TOKEN` |
 
-**Live site before this push** still served the prior build (`info@anzaloneyacht.com`, older homepage architecture). Confirm the new revision after deploy by checking:
+### Owner action to complete production cutover
 
-1. Title contains `Anzalone's | Premium Yacht Care & Maintenance` (or short-name template).
-2. Footer email is `anzaloneyachts@gmail.com`.
-3. Phone `(561) 850-4092` is present.
-4. Official logo appears in the header.
+1. Sign in at https://vercel.com and open the `anzalone-yacht-management` project.
+2. Confirm Git integration with `cmojsiejenko-cloud/anzalone-yacht-management` on `main`.
+3. Trigger **Redeploy** of commit `02763c3` (or reconnect the repo and redeploy).
+4. Set env vars below, then redeploy again if forms must deliver.
+5. Confirm live markers:
+   - Title contains `Anzalone's | Premium Yacht Care & Maintenance`
+   - Footer email `anzaloneyachts@gmail.com`
+   - Phone `(561) 850-4092`
+   - Official logo in the header
 
 ## Environment variables required in Vercel
 
