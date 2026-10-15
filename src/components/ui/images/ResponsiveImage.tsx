@@ -17,6 +17,10 @@ type ResponsiveImageProps = {
   showPlaceholderCaption?: boolean;
   /** Hero/background photos — alt conveyed in page h1; image marked decorative */
   decorative?: boolean;
+  /** Breakpoint where the wide file replaces the mobile crop. */
+  artDirection?: "sm" | "lg";
+  /** Fires per crop so a hero can wait for the visible file before dissolving. */
+  onVariantLoad?: (variant: "mobile" | "desktop") => void;
 };
 
 export function ResponsiveImage({
@@ -30,6 +34,8 @@ export function ResponsiveImage({
   placeholderTone = "default",
   showPlaceholderCaption = true,
   decorative = false,
+  artDirection = "sm",
+  onVariantLoad,
 }: ResponsiveImageProps) {
   const usePlaceholder = forcePlaceholder ?? definition.usePlaceholder;
   const alt = decorative ? "" : definition.alt;
@@ -48,6 +54,8 @@ export function ResponsiveImage({
 
   const loading = priority ? ("eager" as const) : ("lazy" as const);
   const fetchPriority = priority ? ("high" as const) : ("auto" as const);
+  const narrowClass = artDirection === "lg" ? "lg:hidden" : "sm:hidden";
+  const wideClass = artDirection === "lg" ? "hidden lg:block" : "hidden sm:block";
 
   if (
     fill &&
@@ -72,7 +80,8 @@ export function ResponsiveImage({
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           decoding="async"
-          className={cn("object-cover sm:hidden", imgClassName, className)}
+          className={cn("object-cover", narrowClass, imgClassName, className)}
+          onLoad={onVariantLoad ? () => onVariantLoad("mobile") : undefined}
         />
         <Image
           src={definition.src}
@@ -84,7 +93,8 @@ export function ResponsiveImage({
           loading="lazy"
           fetchPriority="auto"
           decoding="async"
-          className={cn("hidden object-cover sm:block", imgClassName, className)}
+          className={cn("hidden object-cover", wideClass, imgClassName, className)}
+          onLoad={onVariantLoad ? () => onVariantLoad("desktop") : undefined}
         />
       </>
     );
@@ -104,6 +114,7 @@ export function ResponsiveImage({
       fetchPriority={fetchPriority}
       decoding="async"
       className={cn("object-cover", imgClassName, className)}
+      onLoad={onVariantLoad ? () => onVariantLoad("desktop") : undefined}
     />
   );
 }

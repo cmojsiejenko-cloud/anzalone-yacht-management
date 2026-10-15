@@ -41,7 +41,7 @@
   --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
   --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
 
-  --text-display-xl: clamp(2.5rem, 5vw + 1rem, 4rem);
+  --text-display-xl: clamp(2.25rem, 4.2vw + 1rem, 4rem);
   --text-display-lg: clamp(2rem, 3.5vw + 0.75rem, 3.25rem);
   --text-display-md: clamp(1.75rem, 2.5vw + 0.5rem, 2.5rem);
   --text-display-sm: clamp(1.5rem, 1.5vw + 0.5rem, 2rem);
@@ -73,6 +73,9 @@
   --duration-base: 300ms;
   --duration-slow: 500ms;
 
+  /* Layout chrome */
+  --site-header-height: 4.75rem;
+
   /* Elevation */
   --shadow-soft: 0 1px 3px rgba(10, 22, 40, 0.03), 0 6px 16px rgba(10, 22, 40, 0.04);
   --shadow-card: 0 1px 2px rgba(10, 22, 40, 0.04), 0 8px 28px rgba(10, 22, 40, 0.06);
@@ -94,6 +97,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -105,6 +109,12 @@
   body {
     @apply bg-ivory text-charcoal font-sans text-base;
     line-height: var(--leading-body);
+    overflow-x: clip;
+  }
+
+  body.mobile-nav-open {
+    overflow: hidden;
+    touch-action: none;
   }
 
   h1,
@@ -136,9 +146,14 @@
   display: block;
 }
 
+.brand-logo--header img {
+  /* Crisp lockup in the bar — slight shadow keeps the navy field clear on bright plates */
+  filter: drop-shadow(0 1px 2px rgba(6, 13, 24, 0.18));
+}
+
 .brand-logo--on-dark img {
   /* Source mark already includes navy field + gold wordmark */
-  filter: none;
+  filter: drop-shadow(0 1px 3px rgba(6, 13, 24, 0.35));
 }
 
 /* ─── Typography scale ───────────────────────────────────────────────────── */
@@ -191,13 +206,32 @@
   }
 
   .type-label {
-    @apply font-sans text-xs font-semibold uppercase text-gold-muted;
+    @apply font-sans text-[0.6875rem] font-semibold uppercase text-gold-muted;
     letter-spacing: var(--tracking-label);
   }
 
   .type-label-light {
-    @apply font-sans text-xs font-semibold uppercase text-gold;
+    @apply font-sans text-[0.6875rem] font-semibold uppercase text-gold;
     letter-spacing: var(--tracking-label);
+  }
+
+  /* Editorial stills — consistent crop plane, no card chrome */
+  .editorial-frame {
+    @apply relative overflow-hidden bg-navy-950;
+  }
+
+  .editorial-frame img {
+    @apply h-full w-full object-cover;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .editorial-frame img {
+      transition: transform 1.2s var(--ease-luxury);
+    }
+
+    .editorial-frame:hover img {
+      transform: scale(1.02);
+    }
   }
 
   .type-stat {
@@ -426,7 +460,39 @@
 
   /* Hero photo legibility — scrim + text shadow over bright hull/sky */
   .cinematic-frame {
-    transition: opacity 1400ms var(--ease-luxury);
+    overflow: hidden;
+    transition: opacity 1800ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cinematic-still {
+    object-position: center 18%;
+    transform-origin: center center;
+  }
+
+  .cinematic-video {
+    object-position: center 42%;
+  }
+
+  @media (min-width: 1024px) {
+    .cinematic-still,
+    .cinematic-video {
+      object-position: center 44%;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .cinematic-still.is-live {
+      animation: cinematic-drift 9.6s linear forwards;
+    }
+  }
+
+  @keyframes cinematic-drift {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.045);
+    }
   }
 
   .hero-photo-scrim {
@@ -450,10 +516,71 @@
       );
   }
 
+  /*
+    Homepage film only. Narrow screens darken the lower band where the type
+    sits and leave the yacht bright above it. From 1024px up, a veil anchored
+    to the text column keeps the copy clear and lets the vessel open to the right.
+    Service heroes keep `.hero-photo-scrim`.
+  */
+  .hero-film-scrim {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    background: linear-gradient(
+      to top,
+      rgba(6, 13, 24, 0.94) 0%,
+      rgba(6, 13, 24, 0.9) 18%,
+      rgba(6, 13, 24, 0.82) 36%,
+      rgba(6, 13, 24, 0.7) 54%,
+      rgba(6, 13, 24, 0.28) 68%,
+      transparent 80%
+    );
+  }
+
+  @media (min-width: 1024px) {
+    .hero-film-scrim {
+      background: linear-gradient(
+        to top,
+        rgba(6, 13, 24, 0.28) 0%,
+        transparent 18%
+      );
+    }
+
+    .hero-film .hero-content-panel {
+      max-width: 30rem;
+      isolation: isolate;
+    }
+
+    /* Keep type clear without burying the yacht under a heavy navy slab */
+    .hero-film .hero-content-panel::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -16vh;
+      bottom: -4.5rem;
+      left: -50vw;
+      right: -12rem;
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        rgba(6, 13, 24, 0.9) 0%,
+        rgba(6, 13, 24, 0.82) 48%,
+        rgba(6, 13, 24, 0.58) 72%,
+        rgba(6, 13, 24, 0.18) 90%,
+        transparent 100%
+      );
+    }
+  }
+
   .hero-content-panel {
     position: relative;
     max-width: 42rem;
-    padding: 1.75rem 0 0.25rem;
+    padding: 1.25rem 0 0.25rem;
+  }
+
+  .hero-film .hero-content-panel {
+    padding-top: 0.5rem;
   }
 
   .hero-headline {
@@ -470,34 +597,177 @@
     text-shadow: 0 1px 16px rgba(6, 13, 24, 0.8);
   }
 
-  /* Hero entrance (above-the-fold, CSS-only) */
-  .hero-enter {
-    opacity: 0;
-    transform: translateY(1rem);
-    animation: hero-enter var(--duration-slow) var(--ease-luxury) forwards;
+  .hero-film .hero-description {
+    max-width: 30rem;
+    color: rgba(247, 244, 239, 0.92);
   }
 
-  .hero-enter-delay-1 {
-    animation-delay: 120ms;
+  .hero-cta-row {
+    margin-top: 2.5rem;
   }
 
-  .hero-enter-delay-2 {
-    animation-delay: 240ms;
+  .hero-cta-primary {
+    min-width: 12.5rem;
+    letter-spacing: 0.14em;
+    box-shadow:
+      0 2px 12px rgba(6, 13, 24, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.14) inset;
   }
 
-  .hero-enter-delay-3 {
-    animation-delay: 360ms;
+  .hero-cta-secondary {
+    min-width: 11.5rem;
+    letter-spacing: 0.14em;
+    border-color: rgba(247, 244, 239, 0.42);
   }
 
-  .hero-enter-delay-4 {
-    animation-delay: 480ms;
-  }
-
-  @keyframes hero-enter {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+  @media (hover: hover) {
+    .hero-cta-secondary:hover {
+      border-color: rgba(247, 244, 239, 0.85);
+      background-color: rgba(247, 244, 239, 0.08);
     }
+  }
+
+  /*
+    Homepage continuity — softens the hero → body join and keeps the seven
+    sections reading as one editorial journey without adding new blocks.
+  */
+  .home-page .hero-film .section-padding {
+    padding-bottom: 4.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .home-page .hero-film .section-padding {
+      padding-bottom: 5.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .home-page .hero-film .section-padding {
+      padding-bottom: 6.5rem;
+    }
+  }
+
+  .home-page .hero-film::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 16;
+    height: clamp(2.75rem, 7vh, 4.5rem);
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(6, 13, 24, 0.4) 45%,
+      rgba(6, 13, 24, 0.88) 100%
+    );
+  }
+
+  .home-page .section-padding {
+    padding-block: 4.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .home-page .section-padding {
+      padding-block: 5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .home-page .section-padding {
+      padding-block: 6.5rem;
+    }
+  }
+
+  .home-section {
+    position: relative;
+  }
+
+  .home-page .home-section--after-hero {
+    background:
+      linear-gradient(
+        to bottom,
+        #060d18 0%,
+        #1a2436 1.25rem,
+        #e8e2d8 4.25rem,
+        var(--color-ivory) 6.5rem
+      );
+    padding-top: 3.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .home-page .home-section--after-hero {
+      padding-top: 3.75rem;
+      background:
+        linear-gradient(
+          to bottom,
+          #060d18 0%,
+          #1a2436 1.5rem,
+          #e8e2d8 5rem,
+          var(--color-ivory) 7.5rem
+        );
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .home-page .home-section--after-hero {
+      padding-top: 4.5rem;
+      background:
+        linear-gradient(
+          to bottom,
+          #060d18 0%,
+          #1a2436 1.75rem,
+          #e8e2d8 5.5rem,
+          var(--color-ivory) 8rem
+        );
+    }
+  }
+
+  .home-section--ivory {
+    background-color: var(--color-ivory);
+  }
+
+  .home-section--surface {
+    background-color: var(--color-surface);
+  }
+
+  .home-section--ink {
+    background-color: var(--color-navy-950);
+  }
+
+  .home-section:not(.home-section--after-hero)::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 169, 98, 0.2) 50%,
+      transparent
+    );
+  }
+
+  .home-section--ink::before {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 169, 98, 0.28) 50%,
+      transparent
+    );
+  }
+
+  .home-section--close {
+    background:
+      radial-gradient(
+        ellipse 70% 55% at 50% 0%,
+        rgba(201, 169, 98, 0.08),
+        transparent 60%
+      ),
+      var(--color-navy-950);
   }
 
   /* Premium image overlays */
@@ -593,8 +863,49 @@
 
   @media (hover: hover) {
     .nav-link-luxury:hover::after,
-    .nav-link-luxury[aria-current="page"]::after {
+    .nav-link-luxury[aria-current="page"]::after,
+    .nav-link-luxury[aria-expanded="true"]::after {
       transform: scaleX(1);
+    }
+  }
+
+  .nav-dropdown {
+    transition:
+      opacity var(--duration-base) var(--ease-luxury),
+      transform var(--duration-base) var(--ease-luxury),
+      visibility var(--duration-base) var(--ease-luxury);
+  }
+
+  .nav-dropdown::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 169, 98, 0.55) 50%,
+      transparent
+    );
+  }
+
+  .header-phone {
+    letter-spacing: 0.12em;
+  }
+
+  .header-phone-icon {
+    color: inherit;
+  }
+
+  @media (hover: hover) {
+    .header-phone-icon:hover {
+      color: var(--color-gold-light);
+    }
+
+    .site-header.is-solid .header-phone-icon:hover {
+      color: var(--color-gold-muted);
     }
   }
 
@@ -640,6 +951,9 @@
   }
 
   .mobile-menu-panel {
+    top: var(--site-header-height, 4.75rem);
+    height: calc(100dvh - var(--site-header-height, 4.75rem));
+    max-height: calc(100vh - var(--site-header-height, 4.75rem));
     opacity: 0;
     transform: translateY(-0.75rem);
     transition:
@@ -674,6 +988,7 @@
   .mobile-menu-panel.is-open .mobile-menu-item:nth-child(7) { transition-delay: 300ms; }
 
   .mobile-submenu {
+    display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows var(--duration-base) var(--ease-luxury);
   }
@@ -687,7 +1002,7 @@
   }
 
   section[id] {
-    scroll-margin-top: 5.5rem;
+    scroll-margin-top: var(--site-header-height, 5.5rem);
   }
 
   .site-header {
@@ -695,6 +1010,8 @@
     inset-inline: 0;
     top: 0;
     z-index: 50;
+    /* Do not put filter/backdrop-filter on this element — it creates a
+       containing block that collapses the fixed mobile menu to 0 height. */
     transition:
       background-color var(--duration-base) var(--ease-luxury),
       border-color var(--duration-base) var(--ease-luxury),
@@ -706,8 +1023,8 @@
     color: var(--color-ivory);
     background: linear-gradient(
       to bottom,
-      rgba(6, 13, 24, 0.82) 0%,
-      rgba(6, 13, 24, 0.42) 70%,
+      rgba(6, 13, 24, 0.72) 0%,
+      rgba(6, 13, 24, 0.36) 68%,
       transparent 100%
     );
     border-bottom: 1px solid transparent;
@@ -715,10 +1032,28 @@
 
   .site-header.is-solid {
     color: var(--color-navy-900);
-    background: rgba(247, 244, 239, 0.94);
-    backdrop-filter: blur(16px);
+    background: rgba(247, 244, 239, 0.96);
     border-bottom: 1px solid rgba(212, 207, 196, 0.9);
     box-shadow: var(--shadow-header);
+  }
+
+  /* Blur lives on a sibling layer so it never traps position:fixed menu */
+  .site-header__frost {
+    display: none;
+    pointer-events: none;
+  }
+
+  .site-header.is-solid .site-header__frost {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    backdrop-filter: blur(16px);
+  }
+
+  .site-header__bar {
+    position: relative;
+    z-index: 1;
   }
 
   /* Header scroll state */
@@ -767,6 +1102,37 @@
   .vessel-review-form {
     @apply border border-ivory-muted bg-surface p-6 sm:p-8 lg:p-10;
     box-shadow: var(--shadow-card);
+  }
+
+  /* Careers / crew forms share the shell but omit per-control classes */
+  .vessel-review-form
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+      [type="file"]
+    ):not(.form-control),
+  .vessel-review-form select:not(.form-control),
+  .vessel-review-form textarea:not(.form-control) {
+    @apply w-full min-h-[3rem] border border-ivory-muted bg-surface px-4 py-3 font-sans text-base text-navy-900;
+    transition:
+      border-color var(--duration-base) var(--ease-luxury),
+      box-shadow var(--duration-base) var(--ease-luxury);
+  }
+
+  .vessel-review-form textarea:not(.form-control) {
+    @apply min-h-[8rem] resize-y leading-relaxed;
+  }
+
+  .vessel-review-form
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not(
+      [type="file"]
+    ):not(.form-control):focus,
+  .vessel-review-form select:not(.form-control):focus,
+  .vessel-review-form textarea:not(.form-control):focus {
+    @apply border-navy-700 outline-none;
+    box-shadow: 0 0 0 1px var(--color-navy-700);
+  }
+
+  .vessel-review-form input[type="file"] {
+    @apply w-full min-h-12 max-w-full py-3 font-sans text-sm text-navy-900 file:mr-4 file:min-h-11 file:cursor-pointer file:border-0 file:bg-navy-900 file:px-4 file:py-2.5 file:font-sans file:text-xs file:font-semibold file:uppercase file:tracking-[0.14em] file:text-ivory;
   }
 
   .vessel-review-form--success {
@@ -894,13 +1260,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cinematic-frame {
+  .cinematic-frame,
+  .cinematic-still {
     transition: none !important;
+    animation: none !important;
+    transform: none !important;
   }
 
   .reveal,
   .reveal-fade,
-  .hero-enter,
   .mobile-menu-backdrop,
   .mobile-menu-panel,
   .mobile-menu-item,

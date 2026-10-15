@@ -17,7 +17,7 @@ export function ProgramCard({ program, index }: ProgramCardProps) {
   return (
     <article className="grid gap-8 border-t border-ivory-dark/70 py-14 lg:grid-cols-12 lg:gap-12 lg:py-16">
       <div className="lg:col-span-5">
-        <figure className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:aspect-[4/5]">
+        <figure className="editorial-frame relative aspect-[4/5] sm:aspect-[16/10] lg:aspect-[4/5]">
           <ResponsiveImage
             definition={image}
             sizes={imageSizes.half}
@@ -30,7 +30,7 @@ export function ProgramCard({ program, index }: ProgramCardProps) {
         <p className="type-label">
           {String(index + 1).padStart(2, "0")} · Illustrative program
         </p>
-        <h3 className="mt-4 font-display text-4xl leading-tight text-navy-900 lg:text-5xl">
+        <h3 className="mt-4 type-display-lg text-balance text-navy-900">
           <Link
             href={`${siteRoutes.programs}/${program.slug}`}
             className="transition-luxury hover:text-yacht-800"

@@ -53,7 +53,8 @@ export function PageHero({
   return (
     <section
       className={cn(
-        "relative overflow-hidden bg-navy-900",
+        "relative overflow-hidden",
+        hasFilm ? "hero-film bg-navy-950" : "bg-navy-900",
         minHeightClasses[minHeight],
         className,
       )}
@@ -77,8 +78,14 @@ export function PageHero({
               />
             </div>
           )}
-          <ImageOverlay variant={backgroundOverlay} />
-          <div className="hero-photo-scrim" aria-hidden />
+          {hasFilm ? (
+            <div className="hero-film-scrim" aria-hidden />
+          ) : (
+            <>
+              <ImageOverlay variant={backgroundOverlay} />
+              <div className="hero-photo-scrim" aria-hidden />
+            </>
+          )}
         </>
       ) : (
         <>
@@ -124,18 +131,17 @@ export function PageHero({
           <LuxuryDivider
             variant="rule"
             className={cn(
-              "hero-enter mb-8",
+              hasFilm ? "mb-6" : "mb-8",
               isCenter && "justify-center",
             )}
           />
           {eyebrow && (
-            <p className="hero-enter hero-enter-delay-1 type-label-light hero-eyebrow">
-              {eyebrow}
-            </p>
+            <p className="type-label-light hero-eyebrow">{eyebrow}</p>
           )}
           <h1
             className={cn(
-              "hero-enter hero-enter-delay-2 hero-headline mt-6 max-w-3xl type-display-xl text-ivory text-balance",
+              "hero-headline max-w-3xl type-display-xl text-ivory text-balance",
+              hasFilm ? "mt-5" : "mt-6",
               isCenter && "mx-auto",
             )}
           >
@@ -144,7 +150,8 @@ export function PageHero({
           {description && (
             <p
               className={cn(
-                "hero-enter hero-enter-delay-3 hero-description mt-6 max-w-xl type-body-lg text-ivory-muted",
+                "hero-description mt-5 max-w-xl type-body-lg leading-relaxed",
+                !hasFilm && "text-ivory-muted",
                 isCenter && "mx-auto",
               )}
             >
@@ -154,7 +161,7 @@ export function PageHero({
           {children && (
             <div
               className={cn(
-                "hero-enter hero-enter-delay-4 mt-10 flex flex-col gap-4 sm:flex-row sm:items-center",
+                "hero-cta-row flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4",
                 isCenter && "justify-center",
               )}
             >

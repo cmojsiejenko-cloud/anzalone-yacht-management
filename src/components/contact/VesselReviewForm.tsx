@@ -285,6 +285,7 @@ export function VesselReviewForm({
                 name="name"
                 type="text"
                 autoComplete="name"
+                enterKeyHint="next"
                 className={inputClass("name")}
                 value={values.name}
                 onChange={(e) => updateField("name", e.target.value)}
@@ -304,6 +305,7 @@ export function VesselReviewForm({
                 type="email"
                 autoComplete="email"
                 inputMode="email"
+                enterKeyHint="next"
                 className={inputClass("email")}
                 value={values.email}
                 onChange={(e) => updateField("email", e.target.value)}
@@ -324,6 +326,7 @@ export function VesselReviewForm({
               type="tel"
               autoComplete="tel"
               inputMode="tel"
+              enterKeyHint="next"
               className={inputClass("phone")}
               value={values.phone}
               onChange={(e) => updateField("phone", e.target.value)}

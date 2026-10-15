@@ -133,6 +133,7 @@ export function CareerApplicationForm({
           id={`${formId}-name`}
           name="name"
           autoComplete="name"
+          enterKeyHint="next"
           value={values.name}
           onChange={(event) => update("name", event.target.value)}
         />
@@ -150,6 +151,8 @@ export function CareerApplicationForm({
             name="email"
             type="email"
             autoComplete="email"
+            inputMode="email"
+            enterKeyHint="next"
             value={values.email}
             onChange={(event) => update("email", event.target.value)}
           />
@@ -165,6 +168,8 @@ export function CareerApplicationForm({
             name="phone"
             type="tel"
             autoComplete="tel"
+            inputMode="tel"
+            enterKeyHint="next"
             value={values.phone}
             onChange={(event) => update("phone", event.target.value)}
           />
@@ -180,6 +185,8 @@ export function CareerApplicationForm({
         <input
           id={`${formId}-location`}
           name="location"
+          autoComplete="address-level2"
+          enterKeyHint="next"
           value={values.location}
           onChange={(event) => update("location", event.target.value)}
         />
@@ -256,12 +263,12 @@ export function CareerApplicationForm({
         required
         error={errors.consent}
       >
-        <label className="flex items-start gap-3 text-sm text-charcoal">
+        <label className="flex min-h-11 items-start gap-3 text-sm text-charcoal">
           <input
             id={`${formId}-consent`}
             name="consent"
             type="checkbox"
-            className="mt-1"
+            className="mt-1 h-5 w-5 shrink-0 accent-navy-900"
             checked={values.consent}
             onChange={(event) => update("consent", event.target.checked)}
           />
@@ -289,6 +296,7 @@ export function CareerApplicationForm({
         type="submit"
         variant="gold"
         size="lg"
+        className="min-h-12 w-full sm:w-auto"
         disabled={status === "submitting"}
       >
         {status === "submitting" ? "Sending…" : "Submit application"}

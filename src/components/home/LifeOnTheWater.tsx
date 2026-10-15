@@ -1,21 +1,26 @@
 import { Container } from "@/components/ui/Container";
+import { LuxuryDivider } from "@/components/ui/LuxuryDivider";
 import { ResponsiveImage } from "@/components/ui/images/ResponsiveImage";
 import { imageSizes, siteImages } from "@/lib/images";
 
 export function LifeOnTheWater() {
   return (
-    <section id="on-the-water" className="section-padding bg-ivory">
+    <section
+      id="on-the-water"
+      className="home-section home-section--ivory section-padding"
+    >
       <Container>
-        <div className="grid items-end gap-10 lg:grid-cols-12 lg:gap-16">
-          <figure className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:col-span-7">
+        <div className="grid items-end gap-8 lg:grid-cols-12 lg:gap-14">
+          <figure className="editorial-frame relative aspect-[4/5] sm:aspect-[16/10] lg:col-span-7">
             <ResponsiveImage
               definition={siteImages.aftDeck}
               sizes={imageSizes.half}
             />
           </figure>
-          <div className="lg:col-span-5 lg:pb-8">
+          <div className="reveal lg:col-span-5 lg:pb-6">
+            <LuxuryDivider variant="rule" className="mb-6" />
             <p className="type-label">Life on the water</p>
-            <h2 className="mt-6 font-display text-4xl leading-tight text-navy-900 sm:text-5xl">
+            <h2 className="mt-5 type-display-lg text-balance text-navy-900">
               The day is the point.
             </h2>
             <div className="mt-6 space-y-5 type-body text-charcoal-soft">
@@ -29,7 +34,7 @@ export function LifeOnTheWater() {
           </div>
         </div>
 
-        <figure className="relative mt-16 aspect-[4/5] overflow-hidden sm:aspect-video">
+        <figure className="editorial-frame relative mt-12 aspect-[4/5] sm:mt-14 sm:aspect-video">
           <ResponsiveImage
             definition={siteImages.departure}
             sizes={imageSizes.hero}

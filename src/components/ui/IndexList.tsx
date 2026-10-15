@@ -18,13 +18,13 @@ export function IndexList({ items }: { items: IndexListItem[] }) {
             <span className="type-label sm:col-span-2">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <span className="font-display text-3xl leading-tight text-navy-900 transition-luxury group-hover:text-yacht-800 sm:col-span-4 sm:text-4xl">
+            <span className="type-display-sm text-navy-900 transition-luxury group-hover:text-yacht-800 sm:col-span-4">
               {item.title}
             </span>
             <span className="type-body text-charcoal-soft sm:col-span-5">
               {item.description}
             </span>
-            <span className="type-label sm:col-span-1 sm:text-right">
+            <span className="type-label text-gold-muted transition-luxury group-hover:text-gold-deep sm:col-span-1 sm:text-right">
               View
             </span>
           </Link>

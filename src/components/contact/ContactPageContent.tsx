@@ -54,7 +54,7 @@ export function ContactPageContent({
       <PageHero
         eyebrow="Contact"
         title="Request a vessel review"
-        description={`Share your vessel, location, and scope. ${personalReplySentence()}`}
+        description={`Share the vessel, the home port, and the scope. ${personalReplySentence()}`}
         minHeight="compact"
         align="center"
       />
@@ -69,36 +69,21 @@ export function ContactPageContent({
                 description="A short form is enough. Required fields help us answer usefully; optional phone stays optional when email is your preference."
               />
 
-              <ul className="mt-10 space-y-8">
-                {trustPoints.map((point) => (
-                  <li key={point.title} className="flex gap-4">
-                    <span
-                      className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center border border-gold/50 bg-surface text-gold"
-                      aria-hidden
-                    >
-                      <svg
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        className="h-3.5 w-3.5"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.25 7.5a1 1 0 0 1-1.418-.006L3.29 9.714a1 1 0 1 1 1.414-1.414l3.18 3.18 6.543-6.772a1 1 0 0 1 1.418.006Z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+              <ol className="mt-10 space-y-8">
+                {trustPoints.map((point, index) => (
+                  <li key={point.title} className="border-t border-ivory-dark/70 pt-6">
+                    <span className="type-label text-gold-muted">
+                      {String(index + 1).padStart(2, "0")}
                     </span>
-                    <div>
-                      <h3 className="font-display text-xl text-navy-900">
-                        {point.title}
-                      </h3>
-                      <p className="mt-2 type-body-sm text-navy-700/85">
-                        {point.description}
-                      </p>
-                    </div>
+                    <h3 className="mt-3 font-display text-2xl text-navy-900">
+                      {point.title}
+                    </h3>
+                    <p className="mt-2 max-w-sm type-body-sm text-charcoal-soft">
+                      {point.description}
+                    </p>
                   </li>
                 ))}
-              </ul>
+              </ol>
 
               <LuxuryDivider variant="rule" className="mt-10" />
 

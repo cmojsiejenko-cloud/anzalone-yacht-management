@@ -58,15 +58,20 @@ The generator’s output ceiling for these frames was 1280×720. `next/image` do
 
 ## Playback
 
-`CinematicBackground` crossfades the five homepage frames about every 5.6 seconds (about 28 seconds for the loop). It is muted-capable video when a file exists:
+Updated 15 October 2026. There is still no video file and no video-generation tool. The homepage is a still sequence, not a completed reel.
+
+`CinematicBackground` dissolves the five homepage frames about every 7.8 seconds (about 39 seconds for the loop) with a 1.8 second crossfade and a 4.5% scale drift. The next frame is not shown until that file has decoded. Below 1024px the player uses the vertical crop. From 1024px up it uses the wide frame. Only the live frame and the next plate are mounted, so the first still can stay the LCP image.
+
+It is muted-capable video when a file exists:
 
 - `heroVideoSrc` in `src/lib/media.ts` is `null`
 - Expected file, when the owner has one: `public/video/hero.mp4`
 - `muted`, `loop`, `playsInline`, `preload="metadata"`, poster set to the first still
 - No audio. No controls over the headline
 - `prefers-reduced-motion: reduce` shows the first still only and does not mount the video
-- A video error drops back to the stills
-- The scrim and `z-20` headline stay above the media
+- A video error, or a rejected `play()`, drops back to the stills
+- Homepage type sits on `.hero-film-scrim` (and a text-column veil from 1024px up). Service heroes still use `.hero-photo-scrim`
+- Headline and CTAs are painted immediately. They do not wait on a fade-in
 
 `public/video/.gitkeep` holds the folder. There is no mp4.
 

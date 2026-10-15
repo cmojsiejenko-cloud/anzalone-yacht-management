@@ -29,9 +29,9 @@ const philosophy = [
       "Direct communication. Attention to detail. Documented standards. Practical execution. Yacht readiness — without a handoff chain.",
   },
   {
-    title: "Protect the investment",
+    title: "Keep the days intact",
     detail:
-      "Care exists so the asset stays sound and the days on the water stay intact. Enjoyment is the point of ownership.",
+      "Care exists so the yacht stays sound and the time aboard stays free of the list that usually comes with ownership.",
   },
 ];
 
@@ -54,14 +54,14 @@ export function AboutPageContent() {
     <>
       <PageHero
         eyebrow="About"
-        title="A maritime legacy. Personal accountability. Exceptional yacht care."
-        description={`${company.shortName} is an owner-operated yacht management practice led by ${displayName}. The work is personal, the standard is readiness, and accountability stays with one operator.`}
+        title="A Naples maritime tradition. One operator for the yacht."
+        description={`${company.shortName} is an owner-operated practice led by ${displayName}. The standard is readiness — and the person accountable for it is the one you reach.`}
         minHeight="tall"
         backgroundImage={siteImages.cruise}
         backgroundOverlay="hero"
       >
         <Button href={siteRoutes.contact} variant="gold" size="lg">
-          Request a Consultation
+          Discuss Your Yacht
         </Button>
         <Button href={siteRoutes.services} variant="ghost" size="lg">
           Explore Services
@@ -76,17 +76,16 @@ export function AboutPageContent() {
             description="With roots in Naples, Italy, and a father who served as a merchant marine captain, Pauly Anzalone’s connection to the water is grounded in seamanship, craftsmanship, and personal responsibility."
             showDivider
           />
-          <div className="mt-8 space-y-5 type-body-lg text-charcoal">
+          <div className="mt-8 space-y-5 type-body-lg text-charcoal-soft">
             <p>
-              That heritage is not a slogan. It is the discipline behind how
-              vessels are treated: respect for the craft, pride in proper work,
-              and accountability for the condition of the yacht under care.
+              That background shapes how vessels are treated: respect for the
+              craft, pride in proper work, and accountability for the condition
+              of the yacht under care.
             </p>
             <p>
-              Anzalone’s Full Service Yacht Management Group carries that
-              standard into modern yacht ownership — so owners protect their
-              investment and keep the reason they bought the yacht: days on the
-              water.
+              Anzalone’s Full Service Yacht Management Group carries the same
+              discipline into modern ownership — so the practical work stays
+              handled, and the days on the water remain the point.
             </p>
           </div>
         </Container>
@@ -126,29 +125,27 @@ export function AboutPageContent() {
                 title={`${company.founder.experienceYears} years of hands-on yacht care`}
                 description={`${role}: ${displayName}`}
               />
-              <div className="mt-6 space-y-5 type-body-lg text-charcoal">
+              <div className="mt-6 space-y-5 type-body-lg text-charcoal-soft">
                 <p>
                   Across {company.founder.experienceYears} years of hands-on
                   yacht management, maintenance, and care — from the Chesapeake,
                   Annapolis, and Virginia waters to mobile operations in South
-                  Florida — that foundation has shaped an approach built around
-                  preparation, craftsmanship, and direct accountability.
+                  Florida — the work has stayed close to the vessel: preparation,
+                  craftsmanship, and direct accountability.
                 </p>
                 <p>
-                  Those years describe professional experience caring for
-                  vessels. They are not a claim that the company was founded a
-                  set number of years ago.
+                  Those years measure experience with yachts, not a company
+                  founding date.
                 </p>
                 <p>
-                  Client and project relationships extend beyond those regions.
-                  Scope and presence are confirmed for each engagement.
+                  Client and project relationships also extend beyond those
+                  waters. Scope and presence are confirmed for each engagement.
                 </p>
               </div>
               {!showFounderPortrait ? (
                 <p className="mt-6 type-body-sm text-charcoal-soft">
-                  An approved founder portrait will appear here when provided.
-                  Until then, we publish the verified name and story — not a
-                  stock or generated likeness.
+                  A verified founder portrait will be published here when
+                  approved.
                 </p>
               ) : null}
             </div>
@@ -219,11 +216,11 @@ export function AboutPageContent() {
               <div className="lg:col-span-5">
                 <SectionHeading
                   eyebrow="In the field"
-                  title="The company vehicle"
-                  description="Authentic branded pickup photography only — never a fabricated truck presented as company property."
+                  title="The truck that carries the work"
+                  description="Branded field equipment photographed as it is used — on the way to the marina, not staged as a catalog prop."
                 />
               </div>
-              <figure className="relative aspect-[16/10] overflow-hidden lg:col-span-7">
+              <figure className="editorial-frame relative aspect-[16/10] lg:col-span-7">
                 <ResponsiveImage
                   definition={siteImages.anzaloneTruck}
                   sizes={imageSizes.half}
@@ -240,8 +237,8 @@ export function AboutPageContent() {
         <Container>
           <SectionHeading
             eyebrow="Presence"
-            title="Where experience meets the water"
-            description="Published regions from the original company website. Permanent offices and guaranteed coverage everywhere are not claimed."
+            title="Where the work has been done"
+            description="South Florida and the Chesapeake–Virginia waters are the published regions of experience. Coverage elsewhere is confirmed by engagement, not assumed."
           />
           <ul className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {serviceAreas.map((area) => (
@@ -268,10 +265,10 @@ export function AboutPageContent() {
               <SectionHeading
                 eyebrow="The lifestyle"
                 title="The day on the water is the point"
-                description="A beautiful yacht exists to be enjoyed. Anzalone handles the responsibilities behind that experience."
+                description="The yacht is for the morning you leave the dock. Anzalone handles the work that should already be finished when you arrive."
               />
             </div>
-            <figure className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:col-span-7">
+            <figure className="editorial-frame relative aspect-[4/5] sm:aspect-[16/10] lg:col-span-7">
               <ResponsiveImage
                 definition={siteImages.aftDeck}
                 sizes={imageSizes.half}
@@ -314,7 +311,7 @@ export function AboutPageContent() {
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button href={siteRoutes.contact} variant="gold" size="lg">
-              Request a Consultation
+              Discuss Your Yacht
             </Button>
             <Button href={siteRoutes.programs} variant="ghost" size="lg">
               View Programs

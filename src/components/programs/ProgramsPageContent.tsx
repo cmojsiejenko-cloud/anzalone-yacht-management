@@ -29,7 +29,7 @@ export function ProgramsPageContent() {
       <PageHero
         eyebrow="Programs"
         title="How the work is held together"
-        description="Services are individual kinds of work. Programs are tailored arrangements that combine them around your yacht. The examples below are illustrative — not fixed packages."
+        description="Services are individual kinds of work. Programs are tailored arrangements that combine them around your yacht — who is responsible, what is checked, and what you hear before you arrive. The examples below are illustrative, not fixed packages."
         minHeight="tall"
         backgroundImage={siteImages.aftDeck}
         backgroundOverlay="hero"
@@ -39,10 +39,10 @@ export function ProgramsPageContent() {
           variant="gold"
           size="lg"
         >
-          Request Program Consultation
+          Discuss a Program
         </Button>
         <Button href="#program-examples" variant="ghost" size="lg">
-          Compare programs
+          Compare examples
         </Button>
       </PageHero>
 

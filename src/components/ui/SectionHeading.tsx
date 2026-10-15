@@ -49,7 +49,7 @@ export function SectionHeading({
       )}
       <h2
         className={cn(
-          "mt-4 type-display-lg text-balance",
+          "mt-5 type-display-lg text-balance",
           isDark ? "text-ivory" : "text-navy-900",
           !eyebrow && showDivider && "mt-0",
         )}
@@ -59,8 +59,9 @@ export function SectionHeading({
       {description && (
         <p
           className={cn(
-            "mt-5 type-body-lg text-pretty",
-            isDark ? "text-ivory-muted" : "text-navy-700",
+            "mt-5 max-w-xl type-body-lg text-pretty",
+            isCenter && "mx-auto",
+            isDark ? "text-ivory-muted" : "text-charcoal-soft",
           )}
         >
           {description}

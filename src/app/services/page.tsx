@@ -62,21 +62,18 @@ export default function ServicesPage() {
         </Button>
       </PageHero>
 
-      <section className="section-padding bg-ivory">
-        <Container size="narrow">
-          <SectionHeading
-            eyebrow="In plain language"
-            title="What Anzalone can help with"
-            description="Anzalone manages and cares for premium yachts. The work removes maintenance, coordination, and preparation from your personal list — so ownership stays enjoyable."
-            showDivider
-          />
-        </Container>
-      </section>
-
       <section className="section-padding bg-surface">
         <Container>
+          <div className="mb-14 max-w-2xl">
+            <SectionHeading
+              eyebrow="In plain language"
+              title="Work defined by the vessel"
+              description="Anzalone manages and cares for premium yachts. Maintenance, coordination, and preparation come off your list — so ownership stays about the time aboard."
+              showDivider
+            />
+          </div>
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-            <figure className="relative aspect-[4/5] overflow-hidden lg:col-span-6 lg:aspect-[4/5]">
+            <figure className="editorial-frame relative aspect-[4/5] lg:col-span-6 lg:aspect-[4/5]">
               <ResponsiveImage
                 definition={siteImages.preparation}
                 sizes={imageSizes.half}
@@ -86,10 +83,10 @@ export default function ServicesPage() {
             </figure>
             <div className="lg:col-span-6">
               <p className="type-label">Field services</p>
-              <h2 className="mt-4 font-display text-4xl leading-tight text-navy-900 lg:text-5xl">
+              <h2 className="mt-4 type-display-lg text-balance text-navy-900">
                 Hands on the vessel, before you fly in
               </h2>
-              <p className="mt-6 type-body-lg text-charcoal">
+              <p className="mt-6 type-body-lg text-charcoal-soft">
                 Exterior washdowns and detailing. Interior presentation.
                 Routine inspections. Maintenance coordination. Vessel
                 readiness. Yard oversight. Operational support on the dock.
@@ -119,7 +116,7 @@ export default function ServicesPage() {
           <SectionHeading
             eyebrow="Service categories"
             title="Five clear distinctions"
-            description="Each category is a defined scope. A program, on the programs page, is how ongoing care is held together."
+            description="Each category is a defined scope of work. A program, on the programs page, is how ongoing care is held together as a rhythm."
           />
           <div className="mt-14">
             <IndexList items={primaryServices} />

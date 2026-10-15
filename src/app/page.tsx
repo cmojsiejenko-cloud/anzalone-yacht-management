@@ -11,7 +11,7 @@ export const metadata = homeMetadata;
 
 export default function HomePage() {
   return (
-    <>
+    <div className="home-page">
       <Hero />
       <OwnershipPromise />
       <Services />
@@ -19,6 +19,6 @@ export default function HomePage() {
       <Difference />
       <LifeOnTheWater />
       <ContactCTA />
-    </>
+    </div>
   );
 }

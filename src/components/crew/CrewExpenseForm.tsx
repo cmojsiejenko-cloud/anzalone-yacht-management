@@ -130,6 +130,7 @@ export function CrewExpenseForm() {
             id={`${formId}-name`}
             name="name"
             autoComplete="name"
+            enterKeyHint="next"
             value={values.name}
             onChange={(event) => update("name", event.target.value)}
           />
@@ -145,6 +146,8 @@ export function CrewExpenseForm() {
             name="email"
             type="email"
             autoComplete="email"
+            inputMode="email"
+            enterKeyHint="next"
             value={values.email}
             onChange={(event) => update("email", event.target.value)}
           />
@@ -160,6 +163,7 @@ export function CrewExpenseForm() {
         <input
           id={`${formId}-vessel`}
           name="vesselOrAssignment"
+          enterKeyHint="next"
           value={values.vesselOrAssignment}
           onChange={(event) =>
             update("vesselOrAssignment", event.target.value)
@@ -177,6 +181,8 @@ export function CrewExpenseForm() {
           <input
             id={`${formId}-location`}
             name="location"
+            autoComplete="address-level2"
+            enterKeyHint="next"
             value={values.location}
             onChange={(event) => update("location", event.target.value)}
           />
@@ -212,7 +218,7 @@ export function CrewExpenseForm() {
         />
       </FormField>
 
-      <fieldset className="space-y-6 border border-ivory-dark/70 p-6">
+      <fieldset className="space-y-6 border border-ivory-dark/70 p-4 sm:p-6">
         <legend className="type-label px-2">Expense amounts (USD)</legend>
         <div className="grid gap-6 sm:grid-cols-2">
           <FormField
@@ -341,12 +347,12 @@ export function CrewExpenseForm() {
         required
         error={errors.consent}
       >
-        <label className="flex items-start gap-3 text-sm text-charcoal">
+        <label className="flex min-h-11 items-start gap-3 text-sm text-charcoal">
           <input
             id={`${formId}-consent`}
             name="consent"
             type="checkbox"
-            className="mt-1"
+            className="mt-1 h-5 w-5 shrink-0 accent-navy-900"
             checked={values.consent}
             onChange={(event) => update("consent", event.target.checked)}
           />
@@ -375,6 +381,7 @@ export function CrewExpenseForm() {
         type="submit"
         variant="gold"
         size="lg"
+        className="min-h-12 w-full sm:w-auto"
         disabled={status === "submitting"}
       >
         {status === "submitting" ? "Sending…" : "Submit expense report"}

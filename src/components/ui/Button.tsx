@@ -19,9 +19,9 @@ const variants: Record<ButtonVariant, string> = {
   ghost:
     "bg-transparent text-ivory border border-ivory/40 hover:border-ivory hover:bg-ivory/10 active:bg-ivory/15 btn-luxury",
   gold:
-    "bg-gold text-navy-950 border border-gold hover:bg-gold-deep hover:border-gold-deep active:bg-gold-deep btn-luxury-shadow",
+    "bg-gold text-navy-950 border border-gold-deep/30 hover:bg-gold-deep hover:border-gold-deep active:bg-gold-deep btn-luxury-shadow",
   link:
-    "bg-transparent text-navy-900 border-0 border-b border-transparent px-0 py-0 rounded-none hover:text-gold-muted hover:border-gold-muted uppercase tracking-[0.2em] font-semibold btn-luxury",
+    "bg-transparent text-navy-900 border-0 border-b border-transparent px-0 py-0 rounded-none tracking-[0.18em] font-semibold hover:text-gold-muted hover:border-gold-muted btn-luxury",
 };
 
 const sizes: Record<ButtonSize, string> = {
@@ -49,7 +49,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const base = cn(
-    "inline-flex items-center justify-center font-medium tracking-wide uppercase btn-luxury",
+    "inline-flex items-center justify-center font-medium uppercase tracking-[0.14em] btn-luxury",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-muted",
     variant !== "link" && sizes[size],
     variants[variant],

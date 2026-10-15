@@ -9,10 +9,10 @@ That deployment may still predate this local architecture until a new deploy is 
 
 | ID | Blocker | Evidence | Owner? | Next action |
 |----|---------|----------|--------|-------------|
-| B3 | Production email unverified | Resend key not confirmed in this session; live delivery not tested | Yes | Configure Resend; live-test all three forms |
-| B4 | Sender domain | Must use verified `@anzaloneyacht.com` from-address | Yes | Replace `onboarding@resend.dev` for public |
+| B3 | Production email unverified | Vercel Production env has **no** `RESEND_API_KEY`; labeled vessel probe → **503** | Yes | Add Resend secrets; verified From domain; labeled inbox test |
+| B4 | Sender domain | `CONTACT_FORM_FROM` unset in Vercel; code falls back to onboarding sender | Yes | Set verified domain From before public launch |
 | B5 | Synthetic founder file | Still in `public/`; registry `usePlaceholder: true` | Code OK; photo optional | Keep placeholder or supply real photo |
-| B9 | Facebook / phone unknown | Env unset; UI hides correctly | Yes | Set only verified values |
+| B9 | Facebook / phone | Published values live in UI; env overrides optional | Mostly closed | Keep only verified public values |
 | B22 | Formal privacy policy | `/privacy` flags pending counsel | Yes + counsel | Replace operational notice when approved |
 
 ## P1 — Domain / hosting
@@ -22,7 +22,7 @@ That deployment may still predate this local architecture until a new deploy is 
 | B10 | Canonical vs live host | Code intends `https://www.anzaloneyacht.com`; align `NEXT_PUBLIC_SITE_URL` when DNS is ready |
 | B11 | DNS | Re-check A/CNAME in Vercel before registrar edits; do not casually change MX |
 | B12 | Search Console | Sitemap not submitted in this session |
-| B13 | Deploy of this codebase | Local only; CLI deploy not authenticated here |
+| B13 | Deploy of this codebase | Closed for current refinements — production `dpl_AyPNwUVQtbBVmfDZ5YXDLYFTefBo` + GitHub sync |
 
 ## P2 — Assets / copy gaps (leave empty rather than fake)
 
@@ -30,7 +30,7 @@ That deployment may still predate this local architecture until a new deploy is 
 |----|-----|
 | B14 | Real truck photo |
 | B15 | Branded uniforms |
-| B16 | Hero mp4 (`heroVideoSrc` null) |
+| B16 | Hero mp4 still absent. Player is wired; `heroVideoSrc` stays null until `public/video/hero.mp4` exists |
 | B17 | Named founder / bio |
 | B18–B21 | Regions locked; no fake credentials/prices/jobs |
 | B23 | Analytics — none; wait for approval |
