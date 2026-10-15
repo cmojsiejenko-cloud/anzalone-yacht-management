@@ -4,15 +4,9 @@
  * Drop final photography into `public/images/` using the filenames below.
  * Set `usePlaceholder: false` on each entry once the real file is in place.
  *
- * Suggested folder layout:
- *   public/images/
- *     yacht-management-hero.jpg      ← Homepage & yacht management hero
- *     anzalone-founder.jpg           ← Founder story & about page portrait
- *     marina-vessel-check.jpg        ← Gallery, vessel readiness
- *     captain-services.jpg           ← Gallery, captain & crew page
- *     refit-custom-work.jpg          ← Gallery, refit page
- *     brokerage-prep.jpg             ← Gallery, brokerage page
- *     detailing-before-after.jpg     ← Before/after showcase (composite or wide crop)
+ * Homepage motion is the still sequence in `src/lib/media.ts`.
+ * A real file at `public/video/hero.mp4` is optional and is not present.
+ * Do not point `heroVideoSrc` at a file that is not in `public/video/`.
  */
 
 export type ImageOverlayVariant =
@@ -29,6 +23,10 @@ export type SiteImageDefinition = {
   alt: string;
   width: number;
   height: number;
+  /** Tighter crop for viewports below the `sm` breakpoint. */
+  mobileSrc?: `/images/${string}`;
+  mobileWidth?: number;
+  mobileHeight?: number;
   /**
    * When true, renders a premium CSS placeholder instead of next/image.
    * Flip to false after adding the file to public/images/.
@@ -41,100 +39,155 @@ export type SiteImageDefinition = {
 };
 
 export const siteImages = {
+  cruise: {
+    src: "/images/cinematic-01-cruise.jpg",
+    mobileSrc: "/images/cinematic-01-cruise-mobile.jpg",
+    alt: "Concept still of a white motor yacht underway on deep blue water",
+    width: 1280,
+    height: 720,
+    mobileWidth: 576,
+    mobileHeight: 720,
+    usePlaceholder: false,
+    subject: "Lifestyle still. Not a documented Anzalone vessel.",
+  },
+  aftDeck: {
+    src: "/images/cinematic-02-aft-deck.jpg",
+    mobileSrc: "/images/cinematic-02-aft-deck-mobile.jpg",
+    alt: "Concept still of sunlight across an empty yacht aft deck and a distant coast",
+    width: 1280,
+    height: 720,
+    mobileWidth: 576,
+    mobileHeight: 720,
+    usePlaceholder: false,
+    subject: "Lifestyle still. Not a documented Anzalone vessel.",
+  },
+  preparation: {
+    src: "/images/cinematic-03-preparation.jpg",
+    mobileSrc: "/images/cinematic-03-preparation-mobile.jpg",
+    alt: "Concept still of two people in plain light shirts and navy shorts preparing a yacht deck",
+    width: 1280,
+    height: 720,
+    mobileWidth: 576,
+    mobileHeight: 720,
+    usePlaceholder: false,
+    subject: "Concept crew only. Not Anzalone staff and not a company uniform.",
+  },
+  craft: {
+    src: "/images/cinematic-05-craft.jpg",
+    mobileSrc: "/images/cinematic-05-craft-mobile.jpg",
+    alt: "Concept still of hands polishing a yacht hull beside a stainless cleat and teak deck",
+    width: 1280,
+    height: 720,
+    mobileWidth: 576,
+    mobileHeight: 720,
+    usePlaceholder: false,
+    subject: "Lifestyle detail. Not a documented Anzalone job.",
+  },
+  departure: {
+    src: "/images/cinematic-06-departure.jpg",
+    mobileSrc: "/images/cinematic-06-departure-mobile.jpg",
+    alt: "Concept still of a white motor yacht leaving a marina for open water",
+    width: 1280,
+    height: 720,
+    mobileWidth: 576,
+    mobileHeight: 720,
+    usePlaceholder: false,
+    subject: "Lifestyle still. Not a documented Anzalone vessel.",
+  },
+  flybridge: {
+    src: "/images/cinematic-flybridge.jpg",
+    mobileSrc: "/images/cinematic-flybridge-mobile.jpg",
+    alt: "Concept still of a person seen from behind at the flybridge helm of a motor yacht",
+    width: 1280,
+    height: 720,
+    mobileWidth: 576,
+    mobileHeight: 720,
+    usePlaceholder: false,
+    subject: "Concept figure only. Not an Anzalone captain or employee.",
+  },
+  refitJoinery: {
+    src: "/images/cinematic-refit-joinery.jpg",
+    mobileSrc: "/images/cinematic-refit-joinery-mobile.jpg",
+    alt: "Concept still of hands fitting a hinge on finished yacht cabinetry",
+    width: 1280,
+    height: 720,
+    mobileWidth: 576,
+    mobileHeight: 720,
+    usePlaceholder: false,
+    subject: "Lifestyle craftsmanship. Not a documented Anzalone refit.",
+  },
   yachtManagementHero: {
     src: "/images/yacht-management-hero.jpg",
-    alt: "South Florida yacht management — motor yacht at marina golden hour, ready for owner arrival",
-    width: 1920,
-    height: 1080,
+    mobileSrc: "/images/yacht-management-hero-mobile.jpg",
+    alt: "White motor yacht alongside a palm-lined dock at sunset",
+    width: 1536,
+    height: 1024,
+    mobileWidth: 819,
+    mobileHeight: 1024,
     usePlaceholder: false,
     subject:
-      "Wide hero — yacht on the dock or underway, calm water, premium feel, space for headline overlay",
+      "Wide hero — yacht on the dock, calm water, premium feel, space for headline overlay. Not proof of a managed vessel.",
     placeholderLabel: "Yacht Management Hero",
   },
   anzaloneFounder: {
     src: "/images/anzalone-founder.jpg",
-    alt: "Founder and operator of Anzalone Yacht Management aboard a managed vessel",
-    width: 1200,
-    height: 1500,
-    usePlaceholder: false,
+    alt: "Reserved portrait area for an owner-approved Anzalone photograph",
+    width: 1536,
+    height: 1024,
+    // File exists but is unapproved synthetic imagery. Do not publish it as a real person.
+    usePlaceholder: true,
     subject:
-      "Portrait — founder on deck or at the helm, professional but approachable, vertical crop",
-    placeholderLabel: "Founder & Operator",
+      "Owner-approved portrait only. Do not use a generated stand-in for a named or implied founder.",
+    placeholderLabel: "Operator",
   },
-  marinaVesselCheck: {
-    src: "/images/marina-vessel-check.jpg",
-    alt: "Yacht maintenance inspection — operator conducting documented vessel readiness check at the dock",
-    width: 1600,
-    height: 1200,
-    usePlaceholder: false,
-    subject: "Dockside walk-through — checklist, lines, spotless decks, morning light",
-    placeholderLabel: "Vessel Readiness",
-  },
-  captainServices: {
-    src: "/images/captain-services.jpg",
-    alt: "Captain coordinating crew and departure preparations on the bridge",
-    width: 1600,
-    height: 1200,
-    usePlaceholder: false,
-    subject: "Bridge or deck — crew briefing, professional uniforms, command presence",
-    placeholderLabel: "Captain & Crew",
-  },
-  refitCustomWork: {
-    src: "/images/refit-custom-work.jpg",
-    alt: "Yacht refit project under supervised yard oversight with quality finishes visible",
-    width: 1600,
-    height: 1200,
-    usePlaceholder: false,
-    subject: "Yard or interior — joinery, systems, or paint with craftsmanship detail",
-    placeholderLabel: "Refit & Custom Work",
+  /**
+   * Company pickup. No authentic file in the repo.
+   * Add public/images/anzalone-truck.jpg, then set usePlaceholder to false
+   * only after the owner accepts the real photograph with real door lettering.
+   */
+  anzaloneTruck: {
+    src: "/images/anzalone-truck.jpg",
+    alt: "Reserved frame for an owner-approved photograph of the Anzalone company vehicle",
+    width: 1536,
+    height: 1024,
+    usePlaceholder: true,
+    subject:
+      "Authentic branded truck only. Do not generate door lettering or invent a vehicle.",
+    placeholderLabel: "Company vehicle",
   },
   brokeragePrep: {
     src: "/images/brokerage-prep.jpg",
-    alt: "Brokerage yacht preparation — yacht staged photo-ready for listing with immaculate presentation",
-    width: 1600,
-    height: 1200,
+    mobileSrc: "/images/brokerage-prep-mobile.jpg",
+    alt: "White motor yacht moored in a marina under a clear sky",
+    width: 1536,
+    height: 1024,
+    mobileWidth: 819,
+    mobileHeight: 1024,
     usePlaceholder: false,
-    subject: "Show-ready exterior — gleaming hull, styled deck, listing-quality light",
+    subject: "Show-ready exterior. Not a listing Anzalone prepared.",
     placeholderLabel: "Brokerage Prep",
-  },
-  detailingBeforeAfter: {
-    src: "/images/detailing-before-after.jpg",
-    alt: "Yacht detailing before and after — side-by-side exterior comparison after professional service",
-    width: 1920,
-    height: 960,
-    usePlaceholder: false,
-    subject:
-      "Composite or wide crop — same angle, dull vs. restored gelcoat/teak, clear transformation",
-    placeholderLabel: "Detailing — Before & After",
   },
 } as const satisfies Record<string, SiteImageDefinition>;
 
 export type SiteImageKey = keyof typeof siteImages;
 
-/** Gallery grid on the homepage */
-export const galleryImages: SiteImageDefinition[] = [
-  siteImages.marinaVesselCheck,
-  siteImages.captainServices,
-  siteImages.refitCustomWork,
-  siteImages.brokeragePrep,
-];
-
 /** Service page hero backgrounds keyed by route slug */
 export const serviceHeroImages: Record<string, SiteImageDefinition> = {
+  "field-services": siteImages.preparation,
   "yacht-management": siteImages.yachtManagementHero,
-  "maintenance-detailing": siteImages.detailingBeforeAfter,
-  "captain-crew-services": siteImages.captainServices,
-  "refit-custom-work": siteImages.refitCustomWork,
+  "maintenance-detailing": siteImages.craft,
+  "captain-crew-services": siteImages.flybridge,
+  "refit-custom-work": siteImages.refitJoinery,
   "brokerage-support": siteImages.brokeragePrep,
 };
 
 /** Responsive `sizes` hints for common layouts */
 export const imageSizes = {
-  hero: "100vw",
+  /** Cap desktop request near source max (1280) — do not ask for 1920 from a 1280 master. */
+  hero: "(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1280px",
   full: "100vw",
   half: "(max-width: 768px) 100vw, 50vw",
   third: "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw",
-  gallery: "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw",
   founder: "(max-width: 1024px) 100vw, 50vw",
   beforeAfter: "100vw",
 } as const;

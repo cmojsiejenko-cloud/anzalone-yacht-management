@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import type { ImageOverlayVariant, SiteImageDefinition } from "@/lib/images";
 import { imageSizes } from "@/lib/images";
+import { CinematicBackground } from "@/components/media/CinematicBackground";
 import { ResponsiveImage } from "./images/ResponsiveImage";
 import { ImageOverlay } from "./images/ImageOverlay";
 import { Container } from "./Container";
@@ -18,6 +19,11 @@ type PageHeroProps = {
   contentClassName?: string;
   /** Optional full-bleed background — final file at public/images/[filename] */
   backgroundImage?: SiteImageDefinition;
+  /** Still sequence, replaced by video when `videoSrc` points at a real file. */
+  film?: {
+    frames: readonly SiteImageDefinition[];
+    videoSrc?: string | null;
+  };
   backgroundOverlay?: ImageOverlayVariant;
 };
 
@@ -37,10 +43,12 @@ export function PageHero({
   className,
   contentClassName,
   backgroundImage,
+  film,
   backgroundOverlay = "hero",
 }: PageHeroProps) {
   const isCenter = align === "center";
-  const hasPhoto = Boolean(backgroundImage);
+  const hasFilm = Boolean(film && film.frames.length > 0);
+  const hasPhoto = hasFilm || Boolean(backgroundImage);
 
   return (
     <section
@@ -52,16 +60,23 @@ export function PageHero({
     >
       {hasPhoto ? (
         <>
-          {/* Final hero photo: public/images/yacht-management-hero.jpg (or per-page image) */}
-          <div className="absolute inset-0" aria-hidden>
-            <ResponsiveImage
-              definition={backgroundImage!}
-              sizes={imageSizes.hero}
+          {hasFilm && film ? (
+            <CinematicBackground
+              frames={film.frames}
+              videoSrc={film.videoSrc}
               priority
-              showPlaceholderCaption={false}
-              decorative
             />
-          </div>
+          ) : (
+            <div className="absolute inset-0" aria-hidden>
+              <ResponsiveImage
+                definition={backgroundImage!}
+                sizes={imageSizes.hero}
+                priority
+                showPlaceholderCaption={false}
+                decorative
+              />
+            </div>
+          )}
           <ImageOverlay variant={backgroundOverlay} />
           <div className="hero-photo-scrim" aria-hidden />
         </>

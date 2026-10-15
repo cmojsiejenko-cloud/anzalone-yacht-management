@@ -9,8 +9,13 @@
   --color-navy-800: #12243d;
   --color-navy-700: #1b3554;
   --color-navy-600: #264a6e;
+  --color-yacht-900: #10263c;
+  --color-yacht-800: #16344f;
+  --color-yacht-700: #1e4a6b;
 
   --color-ink: #0a0a0a;
+  --color-charcoal: #243038;
+  --color-charcoal-soft: #3e4c56;
   --color-ink-muted: #1a1a1a;
 
   --color-ivory: #f7f4ef;
@@ -18,7 +23,8 @@
   --color-ivory-dark: #d4cfc4;
 
   --color-gold: #c9a962;
-  --color-gold-muted: #8f7538;
+  --color-gold-muted: #7a642c;
+  --color-gold-deep: #9c7a32;
   --color-gold-light: #dbc48a;
 
   --color-gray-100: #f3f2f0;
@@ -97,7 +103,7 @@
   }
 
   body {
-    @apply bg-ivory text-ink font-sans text-base;
+    @apply bg-ivory text-charcoal font-sans text-base;
     line-height: var(--leading-body);
   }
 
@@ -117,12 +123,22 @@
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-gold;
+    @apply outline-2 outline-offset-2 outline-gold-muted;
   }
 
   :focus:not(:focus-visible) {
     outline: none;
   }
+}
+
+/* Official logo mark — preserve aspect; no stretch or recolor */
+.brand-logo img {
+  display: block;
+}
+
+.brand-logo--on-dark img {
+  /* Source mark already includes navy field + gold wordmark */
+  filter: none;
 }
 
 /* ─── Typography scale ───────────────────────────────────────────────────── */
@@ -409,6 +425,10 @@
   }
 
   /* Hero photo legibility — scrim + text shadow over bright hull/sky */
+  .cinematic-frame {
+    transition: opacity 1400ms var(--ease-luxury);
+  }
+
   .hero-photo-scrim {
     pointer-events: none;
     position: absolute;
@@ -666,6 +686,41 @@
     overflow: hidden;
   }
 
+  section[id] {
+    scroll-margin-top: 5.5rem;
+  }
+
+  .site-header {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 50;
+    transition:
+      background-color var(--duration-base) var(--ease-luxury),
+      border-color var(--duration-base) var(--ease-luxury),
+      box-shadow var(--duration-base) var(--ease-luxury),
+      color var(--duration-base) var(--ease-luxury);
+  }
+
+  .site-header.is-transparent {
+    color: var(--color-ivory);
+    background: linear-gradient(
+      to bottom,
+      rgba(6, 13, 24, 0.82) 0%,
+      rgba(6, 13, 24, 0.42) 70%,
+      transparent 100%
+    );
+    border-bottom: 1px solid transparent;
+  }
+
+  .site-header.is-solid {
+    color: var(--color-navy-900);
+    background: rgba(247, 244, 239, 0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(212, 207, 196, 0.9);
+    box-shadow: var(--shadow-header);
+  }
+
   /* Header scroll state */
   .header-scrolled {
     box-shadow: var(--shadow-header);
@@ -839,6 +894,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cinematic-frame {
+    transition: none !important;
+  }
+
   .reveal,
   .reveal-fade,
   .hero-enter,

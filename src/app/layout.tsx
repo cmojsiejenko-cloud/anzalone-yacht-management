@@ -17,7 +17,8 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-cormorant",
   display: "swap",
-  weight: ["400", "600", "700"],
+  // Medium (500) is used by display headings; 700 unused — omit for smaller font payload.
+  weight: ["400", "500", "600"],
 });
 
 const dmSans = DM_Sans({
@@ -59,9 +60,7 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  alternates: {
-    canonical: siteUrl,
-  },
+  // Per-page canonicals come from buildPageMetadata — do not pin the root to `/`.
 };
 
 export default function RootLayout({

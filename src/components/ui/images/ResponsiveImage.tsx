@@ -32,7 +32,6 @@ export function ResponsiveImage({
   decorative = false,
 }: ResponsiveImageProps) {
   const usePlaceholder = forcePlaceholder ?? definition.usePlaceholder;
-
   const alt = decorative ? "" : definition.alt;
 
   if (usePlaceholder) {
@@ -47,6 +46,50 @@ export function ResponsiveImage({
     );
   }
 
+  const loading = priority ? ("eager" as const) : ("lazy" as const);
+  const fetchPriority = priority ? ("high" as const) : ("auto" as const);
+
+  if (
+    fill &&
+    definition.mobileSrc &&
+    definition.mobileWidth &&
+    definition.mobileHeight
+  ) {
+    return (
+      <>
+        {/*
+          Art-direction split. Only the mobile crop may be priority/eager so
+          mobile LCP is not blocked by a hidden desktop master download.
+          Desktop uses lazy — still usually in-viewport and discovers quickly.
+        */}
+        <Image
+          src={definition.mobileSrc}
+          alt={alt}
+          aria-hidden={decorative ? true : undefined}
+          fill
+          sizes="100vw"
+          priority={priority}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding="async"
+          className={cn("object-cover sm:hidden", imgClassName, className)}
+        />
+        <Image
+          src={definition.src}
+          alt={alt}
+          aria-hidden={decorative ? true : undefined}
+          fill
+          sizes={sizes}
+          priority={false}
+          loading="lazy"
+          fetchPriority="auto"
+          decoding="async"
+          className={cn("hidden object-cover sm:block", imgClassName, className)}
+        />
+      </>
+    );
+  }
+
   return (
     <Image
       src={definition.src}
@@ -57,10 +100,10 @@ export function ResponsiveImage({
       fill={fill}
       sizes={sizes}
       priority={priority}
-      loading={priority ? "eager" : "lazy"}
-      fetchPriority={priority ? "high" : "auto"}
+      loading={loading}
+      fetchPriority={fetchPriority}
       decoding="async"
-      className={cn("object-cover", imgClassName)}
+      className={cn("object-cover", imgClassName, className)}
     />
   );
 }

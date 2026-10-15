@@ -1,5 +1,3 @@
-export { BeforeAfter } from "./BeforeAfter";
-export { ImageGallery } from "./ImageGallery";
 export { ImageOverlay } from "./ImageOverlay";
 export { ImagePlaceholder } from "./ImagePlaceholder";
 export { LuxuryImage } from "./LuxuryImage";

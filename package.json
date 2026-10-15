@@ -8,7 +8,8 @@
     "build": "next build",
     "package:share": "node scripts/package-share.mjs",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node scripts/test-forms.mjs"
   },
   "dependencies": {
     "next": "^15.3.3",

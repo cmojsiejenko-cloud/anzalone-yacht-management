@@ -1,50 +1,35 @@
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { LuxuryDivider } from "@/components/ui/LuxuryDivider";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import { company, mailtoHref, personalReplySentence } from "@/lib/company";
 import { siteRoutes } from "@/lib/navigation";
 
 export function ContactCTA() {
   return (
-    <section
-      id="contact"
-      className="section-edge-light section-padding bg-surface-muted"
-    >
-      <Container size="narrow">
-        <ScrollReveal>
-          <SectionHeading
-            eyebrow="Contact"
-            title="Begin with a direct conversation"
-            description="Tell us about your vessel, how you use it, and what ready means to you. We respond personally — typically within one business day."
-            align="center"
-          />
-        </ScrollReveal>
-        <ScrollReveal
-          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
-          delay={120}
-        >
-          <Button href={siteRoutes.contact} variant="gold">
-            Contact the Operator
+    <section id="contact" className="section-padding bg-navy-950">
+      <Container size="narrow" className="text-center">
+        <p className="type-label-light">Begin</p>
+        <h2 className="mt-6 font-display text-4xl leading-tight text-ivory sm:text-5xl">
+          Tell us about the yacht.
+        </h2>
+        <p className="mx-auto mt-6 max-w-md type-body text-ivory-muted">
+          A short note on the vessel, the home port, and how you use it is enough to start. {personalReplySentence()}
+        </p>
+        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <Button href={siteRoutes.contact} variant="gold" size="lg">
+            Discuss Your Yacht
           </Button>
-          <Button href="mailto:info@anzaloneyacht.com" variant="secondary">
+          <Button href={mailtoHref} variant="ghost" size="lg">
             Email Directly
           </Button>
-        </ScrollReveal>
-        <ScrollReveal className="reveal-fade" delay={200}>
-          <LuxuryDivider variant="ornate" className="mx-auto mt-12 max-w-xs" />
-          <p className="mt-8 text-center type-body-sm text-gray-500">
-            <a
-              href="mailto:info@anzaloneyacht.com"
-              className="font-medium text-navy-900 transition-luxury hover:text-gold-muted"
-            >
-              info@anzaloneyacht.com
-            </a>
-          </p>
-          <p className="mt-4 text-center type-body-sm text-gray-500">
-            Confidential consultations by appointment.
-          </p>
-        </ScrollReveal>
+        </div>
+        <p className="mt-8">
+          <a
+            href={mailtoHref}
+            className="inline-flex min-h-11 items-center text-sm text-ivory hover:text-gold-light"
+          >
+            {company.email}
+          </a>
+        </p>
       </Container>
     </section>
   );

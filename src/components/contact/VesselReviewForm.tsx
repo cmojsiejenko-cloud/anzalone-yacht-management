@@ -1,6 +1,8 @@
 "use client";
 
+import { Honeypot } from "@/components/forms/Honeypot";
 import { Button } from "@/components/ui/Button";
+import { company, mailtoHref, personalReplySentence } from "@/lib/company";
 import { LuxuryDivider } from "@/components/ui/LuxuryDivider";
 import { FormField } from "@/components/contact/FormField";
 import { cn } from "@/lib/cn";
@@ -15,20 +17,53 @@ import {
   type VesselReviewFormData,
   type VesselReviewFormErrors,
 } from "@/lib/vessel-review-form";
-import { useCallback, useId, useRef, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
-export function VesselReviewForm() {
+type VesselReviewFormProps = {
+  /** Preselected checklist labels from `?service=` / `?program=` on /contact. */
+  initialServices?: string[];
+};
+
+function prefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function buildInitialValues(
+  initialServices: string[] = [],
+): VesselReviewFormData {
+  const allowed = new Set<string>(serviceOptions);
+  const servicesNeeded = initialServices.filter((service) =>
+    allowed.has(service),
+  );
+  return {
+    ...vesselReviewInitialValues,
+    servicesNeeded,
+  };
+}
+
+export function VesselReviewForm({
+  initialServices = [],
+}: VesselReviewFormProps) {
   const formId = useId();
   const formRef = useRef<HTMLFormElement>(null);
-  const [values, setValues] = useState<VesselReviewFormData>(
-    vesselReviewInitialValues,
+  const successRef = useRef<HTMLDivElement>(null);
+  const [values, setValues] = useState<VesselReviewFormData>(() =>
+    buildInitialValues(initialServices),
   );
   const [errors, setErrors] = useState<VesselReviewFormErrors>({});
   const [status, setStatus] = useState<FormStatus>("idle");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [touched, setTouched] = useState<Partial<Record<string, boolean>>>({});
+
+  useEffect(() => {
+    if (status === "success") {
+      successRef.current?.focus();
+    }
+  }, [status]);
 
   const updateField = useCallback(
     <K extends keyof VesselReviewFormData>(
@@ -82,7 +117,7 @@ export function VesselReviewForm() {
   };
 
   const resetForm = () => {
-    setValues(vesselReviewInitialValues);
+    setValues(buildInitialValues(initialServices));
     setErrors({});
     setTouched({});
     setSubmitError(null);
@@ -116,7 +151,10 @@ export function VesselReviewForm() {
 
     if (result.ok) {
       setStatus("success");
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      formRef.current?.scrollIntoView({
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+        block: "start",
+      });
       return;
     }
 
@@ -125,10 +163,14 @@ export function VesselReviewForm() {
   };
 
   if (status === "success") {
+    const firstName = values.name.trim().split(/\s+/)[0] || "there";
     return (
       <div
+        ref={successRef}
         className="vessel-review-form vessel-review-form--success"
+        role="status"
         aria-live="polite"
+        tabIndex={-1}
       >
         <div className="vessel-review-form__success-icon" aria-hidden>
           <svg
@@ -149,18 +191,21 @@ export function VesselReviewForm() {
           Your vessel review request is received
         </h2>
         <p className="mt-4 type-body text-navy-700/90">
-          Thank you, {values.name.trim().split(" ")[0] || "there"}. A member of
-          our team will respond personally — typically within one business day
-          — using your preferred contact method.
+          Thank you, {firstName}. {personalReplySentence()} We will use your
+          preferred contact method
+          {values.preferredContactMethod
+            ? ` (${values.preferredContactMethod})`
+            : ""}
+          .
         </p>
         <LuxuryDivider variant="rule" className="mt-8" />
         <p className="mt-6 type-body-sm text-gray-500">
           Prefer to follow up directly?{" "}
           <a
-            href="mailto:info@anzaloneyacht.com"
+            href={mailtoHref}
             className="font-medium text-navy-900 transition-luxury hover:text-gold-muted"
           >
-            info@anzaloneyacht.com
+            {company.email}
           </a>
         </p>
         <Button
@@ -179,6 +224,11 @@ export function VesselReviewForm() {
   const inputClass = (field: keyof VesselReviewFormData) =>
     cn("form-control", errors[field] && touched[field] && "form-control--error");
 
+  const servicesErrorId = `${formId}-services-error`;
+  const contactMethodErrorId = `${formId}-contact-method-error`;
+  const servicesLegendId = `${formId}-services-legend`;
+  const contactLegendId = `${formId}-contact-legend`;
+
   return (
     <div className="vessel-review-form">
       <form
@@ -186,10 +236,20 @@ export function VesselReviewForm() {
         id={formId}
         onSubmit={handleSubmit}
         noValidate
-        className="space-y-8"
+        className="relative space-y-8"
         aria-busy={status === "submitting"}
       >
-        {status === "error" && submitError && (
+        <Honeypot
+          id={`${formId}-website`}
+          value={values.companyWebsite ?? ""}
+          onChange={(value) => updateField("companyWebsite", value)}
+        />
+
+        <p className="sr-only" aria-live="polite">
+          {status === "submitting" ? "Sending your vessel review request." : ""}
+        </p>
+
+        {status === "error" && submitError ? (
           <div
             className="form-banner form-banner--error"
             role="alert"
@@ -200,15 +260,15 @@ export function VesselReviewForm() {
             <p className="mt-3 type-body-sm text-navy-700/85">
               You may also email{" "}
               <a
-                href="mailto:info@anzaloneyacht.com"
+                href={mailtoHref}
                 className="font-medium text-navy-900 underline-offset-2 hover:underline"
               >
-                info@anzaloneyacht.com
+                {company.email}
               </a>{" "}
               with your vessel details.
             </p>
           </div>
-        )}
+        ) : null}
 
         <fieldset className="space-y-6">
           <legend className="sr-only">Your contact information</legend>
@@ -217,12 +277,11 @@ export function VesselReviewForm() {
           <div className="grid gap-6 sm:grid-cols-2">
             <FormField
               id={`${formId}-name`}
-              label="Name"
+              label="Owner name"
               required
               error={touched.name ? errors.name : undefined}
             >
               <input
-                id={`${formId}-name`}
                 name="name"
                 type="text"
                 autoComplete="name"
@@ -230,7 +289,6 @@ export function VesselReviewForm() {
                 value={values.name}
                 onChange={(e) => updateField("name", e.target.value)}
                 onBlur={() => handleBlur("name")}
-                aria-invalid={!!errors.name}
                 disabled={status === "submitting"}
               />
             </FormField>
@@ -242,7 +300,6 @@ export function VesselReviewForm() {
               error={touched.email ? errors.email : undefined}
             >
               <input
-                id={`${formId}-email`}
                 name="email"
                 type="email"
                 autoComplete="email"
@@ -251,7 +308,6 @@ export function VesselReviewForm() {
                 value={values.email}
                 onChange={(e) => updateField("email", e.target.value)}
                 onBlur={() => handleBlur("email")}
-                aria-invalid={!!errors.email}
                 disabled={status === "submitting"}
               />
             </FormField>
@@ -260,12 +316,10 @@ export function VesselReviewForm() {
           <FormField
             id={`${formId}-phone`}
             label="Phone"
-            required
-            hint="Include country code if outside the U.S."
+            hint="Optional unless you prefer a call. Include country code if outside the U.S."
             error={touched.phone ? errors.phone : undefined}
           >
             <input
-              id={`${formId}-phone`}
               name="phone"
               type="tel"
               autoComplete="tel"
@@ -274,7 +328,6 @@ export function VesselReviewForm() {
               value={values.phone}
               onChange={(e) => updateField("phone", e.target.value)}
               onBlur={() => handleBlur("phone")}
-              aria-invalid={!!errors.phone}
               disabled={status === "submitting"}
             />
           </FormField>
@@ -294,14 +347,12 @@ export function VesselReviewForm() {
               error={touched.vesselName ? errors.vesselName : undefined}
             >
               <input
-                id={`${formId}-vessel-name`}
                 name="vesselName"
                 type="text"
                 className={inputClass("vesselName")}
                 value={values.vesselName}
                 onChange={(e) => updateField("vesselName", e.target.value)}
                 onBlur={() => handleBlur("vesselName")}
-                aria-invalid={!!errors.vesselName}
                 disabled={status === "submitting"}
               />
             </FormField>
@@ -314,14 +365,12 @@ export function VesselReviewForm() {
               error={touched.vesselSize ? errors.vesselSize : undefined}
             >
               <input
-                id={`${formId}-vessel-size`}
                 name="vesselSize"
                 type="text"
                 className={inputClass("vesselSize")}
                 value={values.vesselSize}
                 onChange={(e) => updateField("vesselSize", e.target.value)}
                 onBlur={() => handleBlur("vesselSize")}
-                aria-invalid={!!errors.vesselSize}
                 disabled={status === "submitting"}
                 placeholder="e.g. 72 ft"
               />
@@ -330,20 +379,18 @@ export function VesselReviewForm() {
 
           <FormField
             id={`${formId}-location`}
-            label="Current location"
+            label="Vessel location"
             required
             hint="Marina, yard, or cruising area"
             error={touched.currentLocation ? errors.currentLocation : undefined}
           >
             <input
-              id={`${formId}-location`}
               name="currentLocation"
               type="text"
               className={inputClass("currentLocation")}
               value={values.currentLocation}
               onChange={(e) => updateField("currentLocation", e.target.value)}
               onBlur={() => handleBlur("currentLocation")}
-              aria-invalid={!!errors.currentLocation}
               disabled={status === "submitting"}
               placeholder="e.g. Palm Beach, FL"
             />
@@ -352,19 +399,23 @@ export function VesselReviewForm() {
 
         <LuxuryDivider variant="rule" />
 
-        <fieldset>
-          <legend className="type-label">Services needed</legend>
+        <fieldset
+          aria-invalid={
+            touched.servicesNeeded && errors.servicesNeeded ? true : undefined
+          }
+          aria-describedby={
+            touched.servicesNeeded && errors.servicesNeeded
+              ? servicesErrorId
+              : undefined
+          }
+        >
+          <legend id={servicesLegendId} className="type-label">
+            Services or program interest
+          </legend>
           <p className="mt-2 type-body-sm text-navy-700/80">
             Select all that apply. We will tailor our response to your scope.
           </p>
-          <ul
-            className="mt-5 grid gap-3 sm:grid-cols-2"
-            aria-describedby={
-              touched.servicesNeeded && errors.servicesNeeded
-                ? `${formId}-services-error`
-                : undefined
-            }
-          >
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2" role="list">
             {serviceOptions.map((service) => {
               const checked = values.servicesNeeded.includes(service);
               const checkboxId = `${formId}-service-${service.replace(/\s+/g, "-").toLowerCase()}`;
@@ -393,47 +444,51 @@ export function VesselReviewForm() {
               );
             })}
           </ul>
-          {touched.servicesNeeded && errors.servicesNeeded && (
-            <p
-              id={`${formId}-services-error`}
-              className="form-error mt-3"
-              role="alert"
-            >
+          {touched.servicesNeeded && errors.servicesNeeded ? (
+            <p id={servicesErrorId} className="form-error mt-3" role="alert">
               {errors.servicesNeeded}
             </p>
-          )}
+          ) : null}
         </fieldset>
 
         <FormField
           id={`${formId}-message`}
-          label="Message"
+          label="How can we help?"
           required
           hint="Timeline, how you use the vessel, and what “ready” means to you"
           error={touched.message ? errors.message : undefined}
         >
           <textarea
-            id={`${formId}-message`}
             name="message"
             rows={5}
             className={cn(inputClass("message"), "form-control--textarea")}
             value={values.message}
             onChange={(e) => updateField("message", e.target.value)}
             onBlur={() => handleBlur("message")}
-            aria-invalid={!!errors.message}
             disabled={status === "submitting"}
           />
         </FormField>
 
-        <fieldset>
-          <legend className="type-label">Preferred contact method</legend>
+        <fieldset
+          aria-invalid={
+            touched.preferredContactMethod && errors.preferredContactMethod
+              ? true
+              : undefined
+          }
+          aria-describedby={
+            touched.preferredContactMethod && errors.preferredContactMethod
+              ? contactMethodErrorId
+              : undefined
+          }
+        >
+          <legend id={contactLegendId} className="type-label">
+            Preferred contact method
+          </legend>
           <div
             className="mt-5 grid gap-3"
             role="radiogroup"
-            aria-describedby={
-              touched.preferredContactMethod && errors.preferredContactMethod
-                ? `${formId}-contact-method-error`
-                : undefined
-            }
+            aria-labelledby={contactLegendId}
+            aria-required="true"
           >
             {preferredContactOptions.map((option) => {
               const radioId = `${formId}-contact-${option.value}`;
@@ -460,6 +515,12 @@ export function VesselReviewForm() {
                         option.value as PreferredContactMethod,
                       );
                       markTouched("preferredContactMethod");
+                      setErrors((prev) => {
+                        const next = { ...prev };
+                        delete next.preferredContactMethod;
+                        if (option.value === "email") delete next.phone;
+                        return next;
+                      });
                     }}
                     disabled={status === "submitting"}
                     className="form-radio-card__input"
@@ -476,17 +537,44 @@ export function VesselReviewForm() {
               );
             })}
           </div>
-          {touched.preferredContactMethod &&
-            errors.preferredContactMethod && (
-              <p
-                id={`${formId}-contact-method-error`}
-                className="form-error mt-3"
-                role="alert"
-              >
-                {errors.preferredContactMethod}
-              </p>
-            )}
+          {touched.preferredContactMethod && errors.preferredContactMethod ? (
+            <p id={contactMethodErrorId} className="form-error mt-3" role="alert">
+              {errors.preferredContactMethod}
+            </p>
+          ) : null}
         </fieldset>
+
+        <FormField
+          id={`${formId}-consent`}
+          label="Privacy acknowledgment"
+          required
+          error={touched.consent ? errors.consent : undefined}
+        >
+          <label className="flex items-start gap-3 text-sm text-navy-800">
+            <input
+              name="consent"
+              type="checkbox"
+              className="mt-1 h-4 w-4 shrink-0"
+              checked={values.consent}
+              onChange={(e) => {
+                updateField("consent", e.target.checked);
+                markTouched("consent");
+              }}
+              disabled={status === "submitting"}
+            />
+            <span>
+              I understand this inquiry will be emailed to Anzalone&apos;s for
+              review. See our{" "}
+              <Link
+                href="/privacy"
+                className="font-medium text-navy-900 underline-offset-2 hover:underline"
+              >
+                privacy notice
+              </Link>
+              .
+            </span>
+          </label>
+        </FormField>
 
         <div className="form-submit">
           <Button
@@ -499,8 +587,15 @@ export function VesselReviewForm() {
             {status === "submitting" ? "Sending…" : "Request Vessel Review"}
           </Button>
           <p className="form-disclaimer type-body-sm text-gray-500">
-            Confidential inquiry. No call center — your request goes directly to
-            the operator. We never share your information with third parties.
+            Confidential inquiry. No call center — your request goes to the
+            operator via our email provider. Always reachable at{" "}
+            <a
+              href={mailtoHref}
+              className="font-medium text-navy-900 underline-offset-2 hover:underline"
+            >
+              {company.email}
+            </a>
+            .
           </p>
         </div>
       </form>

@@ -28,8 +28,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
+# env files (keep the committed template)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -42,3 +43,5 @@ yarn-error.log*
 Anzalone-Website-Preview.zip
 lighthouse-report.json
 lighthouse-report2.json
+lighthouse-home.json
+lighthouse-*.json

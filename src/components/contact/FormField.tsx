@@ -1,5 +1,11 @@
 import { cn } from "@/lib/cn";
-import type { ReactNode } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 
 type FormFieldProps = {
   id: string;
@@ -10,6 +16,48 @@ type FormFieldProps = {
   className?: string;
   children: ReactNode;
 };
+
+function enhanceControl(
+  child: ReactElement<Record<string, unknown>>,
+  id: string,
+  error: string | undefined,
+  required: boolean | undefined,
+  describedBy: string | undefined,
+): ReactElement {
+  const tag =
+    typeof child.type === "string" ? child.type : undefined;
+  const isControl =
+    tag === "input" || tag === "textarea" || tag === "select";
+
+  if (!isControl) {
+    return cloneElement(child, {
+      children: Children.map(child.props.children as ReactNode, (nested) => {
+        if (!isValidElement(nested)) return nested;
+        return enhanceControl(
+          nested as ReactElement<Record<string, unknown>>,
+          id,
+          error,
+          required,
+          describedBy,
+        );
+      }),
+    });
+  }
+
+  return cloneElement(child, {
+    id: (child.props.id as string | undefined) ?? id,
+    "aria-invalid": error
+      ? true
+      : (child.props["aria-invalid"] as boolean | undefined),
+    "aria-required": required
+      ? true
+      : (child.props["aria-required"] as boolean | undefined),
+    "aria-describedby":
+      [describedBy, child.props["aria-describedby"] as string | undefined]
+        .filter(Boolean)
+        .join(" ") || undefined,
+  });
+}
 
 export function FormField({
   id,
@@ -25,33 +73,40 @@ export function FormField({
   const describedBy =
     [errorId, hintId].filter(Boolean).join(" ") || undefined;
 
+  const control = Children.map(children, (child) => {
+    if (!isValidElement(child)) return child;
+    return enhanceControl(
+      child as ReactElement<Record<string, unknown>>,
+      id,
+      error,
+      required,
+      describedBy,
+    );
+  });
+
   return (
-    <div className={cn("form-field", className)}>
+    <div className={cn("form-field", error && "form-field--invalid", className)}>
       <label htmlFor={id} className="form-label">
         {label}
-        {required && (
-          <span className="form-required" aria-hidden>
+        {required ? (
+          <span className="form-required">
             {" "}
-            *
+            <span aria-hidden>*</span>
+            <span className="sr-only"> (required)</span>
           </span>
-        )}
+        ) : null}
       </label>
-      <div
-        className={cn(error && "form-field--invalid")}
-        aria-describedby={describedBy}
-      >
-        {children}
-      </div>
-      {hint && !error && (
+      <div>{control}</div>
+      {hint && !error ? (
         <p id={hintId} className="form-hint">
           {hint}
         </p>
-      )}
-      {error && (
+      ) : null}
+      {error ? (
         <p id={errorId} className="form-error" role="alert">
           {error}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }

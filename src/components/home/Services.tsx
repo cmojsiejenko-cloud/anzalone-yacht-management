@@ -1,81 +1,65 @@
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { LuxuryDivider } from "@/components/ui/LuxuryDivider";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ServiceCard } from "@/components/ui/ServiceCard";
-import { siteRoutes } from "@/lib/navigation";
+import { IndexList } from "@/components/ui/IndexList";
+import { ResponsiveImage } from "@/components/ui/images/ResponsiveImage";
+import { siteImages, imageSizes } from "@/lib/images";
+import { serviceNavLinks, siteRoutes } from "@/lib/navigation";
 
-const services = [
-  {
-    title: "Yacht Management",
-    description:
-      "Full-program oversight — scheduling, vendors, budgets, and the operational rhythm that keeps your vessel ready year-round.",
-    href: siteRoutes.yachtManagement,
-  },
-  {
-    title: "Maintenance & Detailing",
-    description:
-      "Planned and corrective work scoped, scheduled, and supervised — plus interior and exterior care held to presentation standards.",
-    href: siteRoutes.maintenanceDetailing,
-  },
-  {
-    title: "Captain & Crew Services",
-    description:
-      "Leadership, training, and day-to-day coordination so your crew operates to your expectations and documented standards.",
-    href: siteRoutes.captainCrew,
-  },
-  {
-    title: "Refit & Custom Work",
-    description:
-      "Yard selection, scope control, and quality oversight for structural, cosmetic, and systems upgrades — start to finish.",
-    href: siteRoutes.refitCustom,
-  },
-  {
-    title: "Brokerage Support",
-    description:
-      "Conditioning, documentation, and show-ready presentation so your vessel enters the market at its true value.",
-    href: siteRoutes.brokerageSupport,
-  },
-];
+const otherServices = serviceNavLinks.slice(1);
 
 export function Services() {
   return (
-    <section
-      id="services"
-      className="section-edge-light section-padding bg-surface-muted"
-    >
+    <section id="services" className="section-padding bg-surface">
       <Container>
-        <ScrollReveal>
-          <SectionHeading
-            eyebrow="Core Services"
-            title="Everything your yacht needs to stay ready"
-            description="Each service supports one outcome: vessel readiness, reliable maintenance, and peace of mind between visits. Engage the full program or the scope your operation requires."
-          />
-        </ScrollReveal>
+        <p className="type-label">Services</p>
+        <h2 className="mt-6 max-w-2xl font-display text-4xl leading-tight text-navy-900 sm:text-5xl">
+          Care that happens beside the yacht.
+        </h2>
 
-        <ScrollReveal className="reveal-fade content-gap-sm" delay={120}>
-          <LuxuryDivider variant="full" />
-        </ScrollReveal>
-
-        <div className="content-gap grid gap-6 sm:grid-cols-2 lg:gap-8">
-          {services.map((service, i) => (
-            <ScrollReveal key={service.title} delay={i * 70}>
-              <ServiceCard
-                title={service.title}
-                description={service.description}
-                href={service.href}
-                index={String(i + 1).padStart(2, "0")}
-              />
-            </ScrollReveal>
-          ))}
+        <div className="mt-14 grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
+          <figure className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:col-span-7">
+            <ResponsiveImage
+              definition={siteImages.preparation}
+              sizes={imageSizes.half}
+            />
+          </figure>
+          <div className="lg:col-span-5">
+            <p className="type-label">Field services</p>
+            <h3 className="mt-4 font-display text-3xl text-navy-900 sm:text-4xl">
+              Hands on the vessel, before you fly in.
+            </h3>
+            <p className="mt-5 type-body text-charcoal-soft">
+              Washdowns, checks, and time on the dock. The practice starts here: decks, systems, and the short list that should be finished before a visit.
+            </p>
+            <Link
+              href={siteRoutes.fieldServices}
+              className="mt-8 inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.2em] text-navy-900 underline-offset-4 transition-luxury hover:text-gold-muted hover:underline"
+            >
+              View field services
+            </Link>
+          </div>
         </div>
 
-        <ScrollReveal className="content-gap-sm flex justify-center" delay={200}>
-          <Button href={siteRoutes.contact} variant="secondary">
-            Discuss Your Vessel
-          </Button>
-        </ScrollReveal>
+        <div className="mt-20">
+          <p className="max-w-xl type-body-sm text-charcoal-soft">
+            The same standard covers management, maintenance, crew, refit, and the work that comes before a sale. Each one is a defined service. A program, below, is how they are held together.
+          </p>
+          <div className="mt-8">
+            <IndexList
+              items={otherServices.map((service) => ({
+                href: service.href,
+                title: service.label,
+                description: service.description ?? "",
+              }))}
+            />
+          </div>
+          <Link
+            href={siteRoutes.services}
+            className="mt-8 inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.2em] text-navy-900 underline-offset-4 hover:text-gold-muted hover:underline"
+          >
+            Explore all services
+          </Link>
+        </div>
       </Container>
     </section>
   );

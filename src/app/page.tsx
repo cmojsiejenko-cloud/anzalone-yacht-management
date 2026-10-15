@@ -1,32 +1,24 @@
-import { ContactCTA } from "@/components/home/ContactCTA";
-import { DetailingShowcase } from "@/components/home/DetailingShowcase";
-import { FounderStory } from "@/components/home/FounderStory";
-import { Hero } from "@/components/home/Hero";
-import { ReadinessCTA } from "@/components/home/ReadinessCTA";
-import { Regions } from "@/components/home/Regions";
-import { Services } from "@/components/home/Services";
-import { Standard } from "@/components/home/Standard";
-import { Trust } from "@/components/home/Trust";
-import { WhyChooseUs } from "@/components/home/WhyChooseUs";
-import { WorkGallery } from "@/components/home/WorkGallery";
-import { homeMetadata } from "@/lib/seo";
-
-export const metadata = homeMetadata;
-
-export default function HomePage() {
-  return (
-    <>
-      <Hero />
-      <Trust />
-      <Standard />
-      <Services />
-      <DetailingShowcase />
-      <WorkGallery />
-      <WhyChooseUs />
-      <Regions />
-      <FounderStory />
-      <ReadinessCTA />
-      <ContactCTA />
-    </>
-  );
-}
+import { ContactCTA } from "@/components/home/ContactCTA";
+import { Difference } from "@/components/home/Difference";
+import { Hero } from "@/components/home/Hero";
+import { LifeOnTheWater } from "@/components/home/LifeOnTheWater";
+import { OwnershipPromise } from "@/components/home/OwnershipPromise";
+import { ProgramsPreview } from "@/components/home/ProgramsPreview";
+import { Services } from "@/components/home/Services";
+import { homeMetadata } from "@/lib/seo";
+
+export const metadata = homeMetadata;
+
+export default function HomePage() {
+  return (
+    <>
+      <Hero />
+      <OwnershipPromise />
+      <Services />
+      <ProgramsPreview />
+      <Difference />
+      <LifeOnTheWater />
+      <ContactCTA />
+    </>
+  );
+}

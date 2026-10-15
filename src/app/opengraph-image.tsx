@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og";
+import { company } from "@/lib/company";
 import { siteName } from "@/lib/seo";
 
 export const dynamic = "force-static";
-export const alt = `${siteName} — owner-operated yacht management`;
+export const alt = `${siteName} — ${company.logoTagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -25,7 +26,7 @@ export default function OpenGraphImage() {
           style={{
             display: "flex",
             alignItems: "center",
-            marginBottom: 32,
+            marginBottom: 28,
           }}
         >
           <div
@@ -38,33 +39,45 @@ export default function OpenGraphImage() {
           />
           <span
             style={{
-              fontSize: 22,
-              letterSpacing: "0.35em",
+              fontSize: 20,
+              letterSpacing: "0.28em",
               textTransform: "uppercase",
               color: "#a88b4a",
               fontFamily: "system-ui, sans-serif",
               fontWeight: 600,
             }}
           >
-            Owner-Operated
+            {company.logoTagline}
           </span>
         </div>
         <div
           style={{
-            fontSize: 72,
+            fontSize: 64,
             fontWeight: 500,
             color: "#f7f4ef",
             lineHeight: 1.05,
             letterSpacing: "-0.02em",
-            maxWidth: 900,
+            maxWidth: 980,
           }}
         >
-          {siteName}
+          {company.shortName}
         </div>
         <p
           style={{
-            marginTop: 28,
+            marginTop: 16,
             fontSize: 28,
+            color: "#dbc48a",
+            lineHeight: 1.3,
+            maxWidth: 900,
+            fontFamily: "Georgia, serif",
+          }}
+        >
+          {company.tagline}
+        </p>
+        <p
+          style={{
+            marginTop: 24,
+            fontSize: 22,
             color: "#e8e4dc",
             lineHeight: 1.45,
             maxWidth: 820,
@@ -72,19 +85,7 @@ export default function OpenGraphImage() {
             fontWeight: 400,
           }}
         >
-          Yacht management · Maintenance · Detailing · Captain services
-        </p>
-        <p
-          style={{
-            marginTop: 20,
-            fontSize: 20,
-            color: "#c9a962",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            fontFamily: "system-ui, sans-serif",
-          }}
-        >
-          South Florida · Annapolis · Chesapeake
+          Full Service Yacht Management · South Florida · Chesapeake · Annapolis
         </p>
       </div>
     ),

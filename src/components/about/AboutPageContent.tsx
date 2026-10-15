@@ -1,140 +1,288 @@
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { FeatureCard } from "@/components/ui/FeatureCard";
 import { LuxuryImage } from "@/components/ui/images";
-import { LuxuryDivider } from "@/components/ui/LuxuryDivider";
 import { PageHero } from "@/components/ui/PageHero";
+import { ResponsiveImage } from "@/components/ui/images/ResponsiveImage";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import {
+  company,
+  founderDisplayName,
+  founderRoleLabel,
+  mailtoHref,
+  personalReplySentence,
+  publicPhone,
+  serviceAreas,
+  telHref,
+} from "@/lib/company";
 import { imageSizes, siteImages } from "@/lib/images";
 import { siteRoutes } from "@/lib/navigation";
 
-const principles = [
+const philosophy = [
   {
-    stat: "01",
-    label: "Accountability",
-    detail: "One operator owns outcomes — not a handoff chain.",
+    title: "A yacht is not a work order",
+    detail:
+      "Owners should arrive knowing preparation, scheduling, condition oversight, and the practical details have already been addressed.",
   },
   {
-    stat: "02",
-    label: "Readiness",
-    detail: "Your yacht prepared before you arrive, every time.",
+    title: "One accountable operator",
+    detail:
+      "Direct communication. Attention to detail. Documented standards. Practical execution. Yacht readiness — without a handoff chain.",
   },
   {
-    stat: "03",
-    label: "Selectivity",
-    detail: "A focused roster so attention stays on your vessel.",
-  },
-  {
-    stat: "04",
-    label: "Clarity",
-    detail: "Reporting and communication without noise or delay.",
+    title: "Protect the investment",
+    detail:
+      "Care exists so the asset stays sound and the days on the water stay intact. Enjoyment is the point of ownership.",
   },
 ];
 
-const credentials = [
-  "Owner-operated — no delegation to junior staff for owner decisions",
-  "Hands-on yard, crew, and owner-side operational experience",
-  "Documented standards across management, maintenance, and crew",
-  "Direct communication — you speak with the person responsible",
+const approach = [
+  "Owner-operated decisions on the care of the yacht",
+  "Direct communication with the person accountable for outcomes",
+  "Hands-on field work beside the vessel, not only desk updates",
+  "Documented condition and plain reporting",
+  "Selective attention so standards stay high",
 ];
 
 export function AboutPageContent() {
+  const role = founderRoleLabel();
+  const displayName = founderDisplayName();
+  const phone = publicPhone();
+  const showFounderPortrait = !siteImages.anzaloneFounder.usePlaceholder;
+  const showTruck = !siteImages.anzaloneTruck.usePlaceholder;
+
   return (
     <>
       <PageHero
-        eyebrow="About Anzalone"
-        title="Owner-operated management for owners who expect more than updates"
-        description="Founded on one commitment: vessel readiness, reliable maintenance, and peace of mind — with one accountable operator behind every decision."
-        minHeight="default"
+        eyebrow="About"
+        title="A maritime legacy. Personal accountability. Exceptional yacht care."
+        description={`${company.shortName} is an owner-operated yacht management practice led by ${displayName}. The work is personal, the standard is readiness, and accountability stays with one operator.`}
+        minHeight="tall"
+        backgroundImage={siteImages.cruise}
+        backgroundOverlay="hero"
       >
         <Button href={siteRoutes.contact} variant="gold" size="lg">
-          Schedule a Consultation
+          Request a Consultation
+        </Button>
+        <Button href={siteRoutes.services} variant="ghost" size="lg">
+          Explore Services
         </Button>
       </PageHero>
 
       <section className="section-padding bg-ivory">
-        <Container>
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
-            {/*
-              Final portrait — public/images/anzalone-founder.jpg
-              Set siteImages.anzaloneFounder.usePlaceholder to false in src/lib/images.ts
-            */}
-            <LuxuryImage
-              definition={siteImages.anzaloneFounder}
-              sizes={imageSizes.founder}
-              aspectRatio="aspect-[4/5] w-full sm:aspect-[5/4] lg:aspect-[4/5]"
-              overlay="bottom"
-              showPlaceholderCaption={false}
-            >
-              <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-end p-8 pb-10 text-center">
-                <p className="type-label-light">Founder & Operator</p>
-                <p className="mt-3 font-display text-2xl text-ivory sm:text-3xl">
-                  Anzalone Yacht Management
-                </p>
-              </div>
-            </LuxuryImage>
+        <Container size="narrow">
+          <SectionHeading
+            eyebrow="The origin"
+            title="Rooted in a family maritime tradition"
+            description="With roots in Naples, Italy, and a father who served as a merchant marine captain, Pauly Anzalone’s connection to the water is grounded in seamanship, craftsmanship, and personal responsibility."
+            showDivider
+          />
+          <div className="mt-8 space-y-5 type-body-lg text-charcoal">
+            <p>
+              That heritage is not a slogan. It is the discipline behind how
+              vessels are treated: respect for the craft, pride in proper work,
+              and accountability for the condition of the yacht under care.
+            </p>
+            <p>
+              Anzalone’s Full Service Yacht Management Group carries that
+              standard into modern yacht ownership — so owners protect their
+              investment and keep the reason they bought the yacht: days on the
+              water.
+            </p>
+          </div>
+        </Container>
+      </section>
 
-            <div>
+      <section className="section-padding bg-surface">
+        <Container>
+          <div
+            className={
+              showFounderPortrait
+                ? "grid items-center gap-12 lg:grid-cols-12 lg:gap-16"
+                : "mx-auto max-w-3xl"
+            }
+          >
+            {showFounderPortrait ? (
+              <div className="lg:col-span-5">
+                <LuxuryImage
+                  definition={siteImages.anzaloneFounder}
+                  sizes={imageSizes.founder}
+                  aspectRatio="aspect-[4/5] w-full"
+                  overlay="bottom"
+                  showPlaceholderCaption={false}
+                >
+                  <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-end p-8 pb-10 text-center">
+                    <p className="type-label-light">{role}</p>
+                    <p className="mt-3 font-display text-2xl text-ivory sm:text-3xl">
+                      {displayName}
+                    </p>
+                  </div>
+                </LuxuryImage>
+              </div>
+            ) : null}
+
+            <div className={showFounderPortrait ? "lg:col-span-7" : undefined}>
               <SectionHeading
-                eyebrow="Our Story"
-                title="Built by an operator who still answers the call"
+                eyebrow="The experience"
+                title={`${company.founder.experienceYears} years of hands-on yacht care`}
+                description={`${role}: ${displayName}`}
               />
-              <div className="mt-6 space-y-5 type-body text-navy-700/90">
+              <div className="mt-6 space-y-5 type-body-lg text-charcoal">
                 <p>
-                  Anzalone was founded for owners who have managed a yacht before
-                  — and understand the difference between a firm that processes
-                  tasks and one that delivers readiness.
+                  Across {company.founder.experienceYears} years of hands-on
+                  yacht management, maintenance, and care — from the Chesapeake,
+                  Annapolis, and Virginia waters to mobile operations in South
+                  Florida — that foundation has shaped an approach built around
+                  preparation, craftsmanship, and direct accountability.
                 </p>
                 <p>
-                  This is not a franchise scaled for investor returns. It is
-                  owner-operated yacht management: clear accountability, a
-                  standard that holds when schedules tighten, and communication
-                  that respects your time.
+                  Those years describe professional experience caring for
+                  vessels. They are not a claim that the company was founded a
+                  set number of years ago.
                 </p>
                 <p>
-                  We built the practice around what owners ask for and rarely get
-                  — peace of mind that the yacht is ready before they land.
-                  Systems exercised, cosmetics addressed, crew aligned, and vendors
-                  supervised in advance — not explained away on arrival.
+                  Client and project relationships extend beyond those regions.
+                  Scope and presence are confirmed for each engagement.
                 </p>
               </div>
-              <LuxuryDivider variant="rule" className="mt-8" />
-              <ul className="mt-8 space-y-3">
-                {credentials.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-3 type-body-sm text-navy-700/85"
-                  >
-                    <span
-                      className="mt-1.5 h-1.5 w-1.5 shrink-0 bg-gold"
-                      aria-hidden
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              {!showFounderPortrait ? (
+                <p className="mt-6 type-body-sm text-charcoal-soft">
+                  An approved founder portrait will appear here when provided.
+                  Until then, we publish the verified name and story — not a
+                  stock or generated likeness.
+                </p>
+              ) : null}
             </div>
           </div>
         </Container>
       </section>
 
-      <section className="section-padding bg-surface-muted">
+      <section className="section-padding bg-ivory">
         <Container>
           <SectionHeading
-            eyebrow="The Anzalone Standard"
-            title="Principles that govern every engagement"
-            description="Whether you engage full management or a focused service scope, these principles do not change."
-            align="center"
+            eyebrow="The philosophy"
+            title="How the practice is run"
+            description={`${company.tagline} Care exists so ownership feels like arrival — not another job.`}
           />
-          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-            {principles.map((item) => (
-              <FeatureCard
-                key={item.label}
-                stat={item.stat}
-                label={item.label}
-                detail={item.detail}
-              />
+          <ol className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            {philosophy.map((item, index) => (
+              <li
+                key={item.title}
+                className="border-t border-ivory-dark/70 pt-8"
+              >
+                <span className="type-label text-gold-muted">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-4 font-display text-2xl text-navy-900">
+                  {item.title}
+                </h3>
+                <p className="mt-4 type-body text-charcoal-soft">
+                  {item.detail}
+                </p>
+              </li>
             ))}
+          </ol>
+        </Container>
+      </section>
+
+      <section className="section-padding bg-navy-950">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-5">
+              <SectionHeading
+                eyebrow="The approach"
+                title="Personal oversight. Practical execution."
+                theme="dark"
+              />
+            </div>
+            <ul className="space-y-4 lg:col-span-7">
+              {approach.map((item) => (
+                <li
+                  key={item}
+                  className="flex gap-3 border-t border-ivory/15 pt-6 type-body text-ivory"
+                >
+                  <span
+                    className="mt-2.5 h-1.5 w-1.5 shrink-0 bg-gold-light"
+                    aria-hidden
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </section>
+
+      {showTruck ? (
+        <section className="section-padding bg-ivory">
+          <Container>
+            <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-5">
+                <SectionHeading
+                  eyebrow="In the field"
+                  title="The company vehicle"
+                  description="Authentic branded pickup photography only — never a fabricated truck presented as company property."
+                />
+              </div>
+              <figure className="relative aspect-[16/10] overflow-hidden lg:col-span-7">
+                <ResponsiveImage
+                  definition={siteImages.anzaloneTruck}
+                  sizes={imageSizes.half}
+                  className="object-cover"
+                  showPlaceholderCaption={false}
+                />
+              </figure>
+            </div>
+          </Container>
+        </section>
+      ) : null}
+
+      <section className="section-padding bg-surface">
+        <Container>
+          <SectionHeading
+            eyebrow="Presence"
+            title="Where experience meets the water"
+            description="Published regions from the original company website. Permanent offices and guaranteed coverage everywhere are not claimed."
+          />
+          <ul className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {serviceAreas.map((area) => (
+              <li
+                key={area.name}
+                className="border-t border-ivory-dark/70 pt-8"
+              >
+                <h3 className="font-display text-2xl text-navy-900 lg:text-3xl">
+                  {area.name}
+                </h3>
+                <p className="mt-4 type-body text-charcoal-soft">
+                  {area.detail}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      <section className="section-padding bg-ivory">
+        <Container>
+          <div className="grid items-end gap-12 lg:grid-cols-12 lg:gap-16">
+            <div className="lg:col-span-5">
+              <SectionHeading
+                eyebrow="The lifestyle"
+                title="The day on the water is the point"
+                description="A beautiful yacht exists to be enjoyed. Anzalone handles the responsibilities behind that experience."
+              />
+            </div>
+            <figure className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:col-span-7">
+              <ResponsiveImage
+                definition={siteImages.aftDeck}
+                sizes={imageSizes.half}
+                className="object-cover"
+                showPlaceholderCaption={false}
+              />
+              <figcaption className="sr-only">
+                Concept still of a yacht aft deck. Not a documented Anzalone
+                vessel.
+              </figcaption>
+            </figure>
           </div>
         </Container>
       </section>
@@ -142,15 +290,34 @@ export function AboutPageContent() {
       <section className="section-padding-lg bg-navy-950">
         <Container size="narrow">
           <SectionHeading
-            eyebrow="Engage"
-            title="We accept a limited number of new programs each season"
-            description="Tell us about your vessel and how you use it. If there is a fit, you will hear from us directly."
+            eyebrow="Next step"
+            title="Tell us about the yacht"
+            description={`${personalReplySentence()} Share the vessel, location, and what ready means to you.`}
             align="center"
             theme="dark"
           />
-          <div className="mt-10 flex justify-center">
+          <div className="mt-8 flex flex-col items-center gap-3 text-center text-sm text-ivory-muted">
+            {phone ? (
+              <a
+                href={telHref}
+                className="inline-flex min-h-11 items-center text-gold-light hover:text-ivory"
+              >
+                {phone}
+              </a>
+            ) : null}
+            <a
+              href={mailtoHref}
+              className="inline-flex min-h-11 items-center text-ivory-muted hover:text-ivory"
+            >
+              {company.email}
+            </a>
+          </div>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button href={siteRoutes.contact} variant="gold" size="lg">
-              Contact the Operator
+              Request a Consultation
+            </Button>
+            <Button href={siteRoutes.programs} variant="ghost" size="lg">
+              View Programs
             </Button>
           </div>
         </Container>

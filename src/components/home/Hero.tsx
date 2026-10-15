@@ -1,26 +1,22 @@
 import { Button } from "@/components/ui/Button";
 import { PageHero } from "@/components/ui/PageHero";
+import { heroSequence, heroVideoSrc } from "@/lib/media";
 import { siteRoutes } from "@/lib/navigation";
-import { siteImages } from "@/lib/images";
 
 export function Hero() {
   return (
     <PageHero
-      eyebrow="Owner-Operated Yacht Management"
+      eyebrow="Anzalone's · Full Service Yacht Management"
       title="Ready before you arrive."
-      description="South Florida, Annapolis, and the Chesapeake — one accountable operator for yacht management, maintenance, detailing, captain services, and brokerage preparation."
-      backgroundImage={siteImages.yachtManagementHero}
+      description="One person is accountable for the care of the yacht. Maintenance, coordination, and preparation are handled. You arrive, and the water is yours to enjoy."
+      film={{ frames: heroSequence, videoSrc: heroVideoSrc }}
       backgroundOverlay="hero"
     >
-      <Button href={siteRoutes.contact} variant="ghost">
-        Discuss Your Vessel
+      <Button href={siteRoutes.contact} variant="gold">
+        Discuss Your Yacht
       </Button>
-      <Button
-        href="#standard"
-        variant="secondary"
-        className="border-ivory/40 text-ivory hover:bg-ivory hover:text-navy-900"
-      >
-        The Anzalone Standard
+      <Button href={siteRoutes.services} variant="ghost">
+        Explore Services
       </Button>
     </PageHero>
   );

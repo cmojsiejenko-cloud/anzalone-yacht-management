@@ -5,7 +5,16 @@ import { LuxuryDivider } from "@/components/ui/LuxuryDivider";
 import { PageHero } from "@/components/ui/PageHero";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { serviceNavLinks } from "@/lib/navigation";
+import {
+  company,
+  mailtoHref,
+  personalReplySentence,
+  publicPhone,
+  serviceAreas,
+  telHref,
+  verifiedSocialLinks,
+} from "@/lib/company";
+import { programNavLinks, serviceNavLinks, siteRoutes } from "@/lib/navigation";
 import Link from "next/link";
 
 const trustPoints = [
@@ -17,12 +26,11 @@ const trustPoints = [
   {
     title: "Confidential by default",
     description:
-      "Vessel details and ownership context stay between you and our team.",
+      "Vessel details stay between you and our team. Submissions are emailed for review — not published.",
   },
   {
     title: "Personal response",
-    description:
-      "Qualified inquiries receive a reply within one business day.",
+    description: personalReplySentence(),
   },
 ];
 
@@ -34,13 +42,19 @@ const inquiryTopics = [
   "Brokerage preparation and sale support",
 ];
 
-export function ContactPageContent() {
+type ContactPageContentProps = {
+  initialServices?: string[];
+};
+
+export function ContactPageContent({
+  initialServices = [],
+}: ContactPageContentProps) {
   return (
     <>
       <PageHero
         eyebrow="Contact"
         title="Request a vessel review"
-        description="Share your vessel, location, and scope. We respond personally — typically within one business day — with a confidential, operator-led assessment."
+        description={`Share your vessel, location, and scope. ${personalReplySentence()}`}
         minHeight="compact"
         align="center"
       />
@@ -50,9 +64,9 @@ export function ContactPageContent() {
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 xl:gap-20">
             <ScrollReveal className="lg:sticky lg:top-28 lg:self-start">
               <SectionHeading
-                eyebrow="Why owners trust us"
-                title="A premium standard from first contact"
-                description="This is not a generic lead form. Every field helps us understand your vessel and deliver a useful first response."
+                eyebrow="For yacht owners"
+                title="A clear first conversation"
+                description="A short form is enough. Required fields help us answer usefully; optional phone stays optional when email is your preference."
               />
 
               <ul className="mt-10 space-y-8">
@@ -89,47 +103,93 @@ export function ContactPageContent() {
               <LuxuryDivider variant="rule" className="mt-10" />
 
               <div className="mt-10 space-y-6">
+                {publicPhone() ? (
+                  <div>
+                    <p className="type-label">Phone</p>
+                    <a
+                      href={telHref}
+                      className="mt-2 inline-block font-display text-2xl text-navy-900 transition-luxury hover:text-gold-muted"
+                    >
+                      {publicPhone()}
+                    </a>
+                    <p className="mt-2 type-body-sm text-navy-700/80">
+                      Tap to call from your phone.
+                    </p>
+                  </div>
+                ) : null}
                 <div>
                   <p className="type-label">Email</p>
                   <a
-                    href="mailto:info@anzaloneyacht.com"
+                    href={mailtoHref}
                     className="mt-2 inline-block font-display text-2xl text-navy-900 transition-luxury hover:text-gold-muted"
                   >
-                    info@anzaloneyacht.com
+                    {company.email}
                   </a>
+                  <p className="mt-2 type-body-sm text-navy-700/80">
+                    Working fallback if the form cannot send.
+                  </p>
                 </div>
+                {verifiedSocialLinks().map((link) => (
+                  <div key={link.href}>
+                    <p className="type-label">{link.label}</p>
+                    <a
+                      href={link.href}
+                      className="mt-2 inline-flex min-h-11 items-center text-navy-900 underline-offset-2 hover:underline"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Follow {company.shortName} on Facebook
+                    </a>
+                  </div>
+                ))}
                 <div>
                   <p className="type-label">Service area</p>
-                  <p className="mt-2 type-body text-navy-700">
-                    South Florida, Annapolis, the Chesapeake Bay, and select
-                    destinations by arrangement.
-                  </p>
+                  <ul className="mt-2 space-y-1">
+                    {serviceAreas.map((area) => (
+                      <li key={area.name} className="type-body text-navy-800">
+                        {area.name}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              <Button
-                href="mailto:info@anzaloneyacht.com"
-                variant="secondary"
-                size="md"
-                className="mt-8 w-full sm:w-auto"
-              >
-                Email directly
-              </Button>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                {publicPhone() ? (
+                  <Button
+                    href={telHref}
+                    variant="primary"
+                    size="md"
+                    className="w-full sm:w-auto"
+                  >
+                    Call {publicPhone()}
+                  </Button>
+                ) : null}
+                <Button
+                  href={mailtoHref}
+                  variant="secondary"
+                  size="md"
+                  className="w-full sm:w-auto"
+                >
+                  Email directly
+                </Button>
+              </div>
             </ScrollReveal>
 
             <ScrollReveal delay={100}>
               <div className="mb-6 lg:mb-8">
                 <p className="type-label">Vessel review request</p>
                 <h2 className="mt-3 type-display-sm text-navy-900">
-                  Tell us about your program
+                  Tell us about your yacht
                 </h2>
                 <p className="mt-3 type-body-sm text-navy-700/85">
-                  Complete the form below. Required fields are marked. The more
-                  context you provide, the more useful our first response will
-                  be.
+                  {initialServices.length > 0
+                    ? "Your selected interest is pre-checked below. Add anything else that applies."
+                    : "Complete the form below. Required fields are marked."}{" "}
+                  Every submitted detail is included in the email to us.
                 </p>
               </div>
-              <VesselReviewForm />
+              <VesselReviewForm initialServices={initialServices} />
             </ScrollReveal>
           </div>
         </Container>
@@ -163,23 +223,51 @@ export function ContactPageContent() {
       <section className="section-padding bg-ivory">
         <Container>
           <SectionHeading
-            eyebrow="Services"
-            title="Explore our programs"
-            description="Review the service that fits your needs — or select options in the form and we will recommend the right scope."
+            eyebrow="Services & programs"
+            title="Explore before you inquire"
+            description="Review the work streams and illustrative programs — then return here with the right interest selected."
             align="center"
           />
-          <ul className="mt-12 flex flex-wrap justify-center gap-3">
-            {serviceNavLinks.map((link) => (
-              <li key={link.href}>
+          <div className="mt-12 grid gap-10 lg:grid-cols-2">
+            <div>
+              <h3 className="type-label">Services</h3>
+              <ul className="mt-5 flex flex-wrap gap-3">
+                {serviceNavLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="inline-flex min-h-11 items-center border border-ivory-muted bg-surface px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-navy-800 transition-luxury hover:border-navy-900 hover:text-navy-900"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="type-label">Programs</h3>
+              <ul className="mt-5 flex flex-wrap gap-3">
+                {programNavLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="inline-flex min-h-11 items-center border border-ivory-muted bg-surface px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-navy-800 transition-luxury hover:border-navy-900 hover:text-navy-900"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4">
                 <Link
-                  href={link.href}
-                  className="inline-block border border-ivory-muted bg-surface px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-navy-800 transition-luxury hover:border-navy-900 hover:text-navy-900"
+                  href={siteRoutes.programs}
+                  className="type-body-sm font-medium text-navy-900 underline-offset-2 hover:underline"
                 >
-                  {link.label}
+                  All programs
                 </Link>
-              </li>
-            ))}
-          </ul>
+              </p>
+            </div>
+          </div>
         </Container>
       </section>
     </>

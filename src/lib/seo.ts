@@ -1,48 +1,57 @@
 import type { Metadata } from "next";
+import {
+  company,
+  OFFICIAL_NAME,
+  publicPhone,
+  VERCEL_PRODUCTION_URL,
+} from "@/lib/company";
 
-/** Public site URL — set NEXT_PUBLIC_SITE_URL in production (e.g. https://anzaloneyacht.com) */
+/**
+ * Canonical host: use NEXT_PUBLIC_SITE_URL when set.
+ * Default is the existing Vercel production hostname until a custom domain is confirmed.
+ * Do not assume www.anzaloneyacht.com or anzaloneyachtmanagment.com without verified control.
+ */
 export const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://www.anzaloneyacht.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? VERCEL_PRODUCTION_URL;
 
-export const siteName = "Anzalone Yacht Management";
+export const siteName = OFFICIAL_NAME;
 
 export const defaultDescription =
-  "Owner-operated yacht management in South Florida, Annapolis, and the Chesapeake — vessel readiness, yacht maintenance, detailing, captain services, and brokerage yacht preparation.";
+  "Owner-operated yacht management by Pauly Anzalone — 22 years of hands-on experience across the Chesapeake, Annapolis, Virginia, and mobile South Florida. Premium yacht care, maintenance, and readiness.";
 
-/** Primary SEO keywords woven into titles, copy, and metadata */
 export const targetKeywords = [
   "yacht management",
+  "Anzalone yacht management",
   "yacht management Annapolis",
   "Chesapeake yacht management",
+  "South Florida yacht management",
   "yacht maintenance",
   "yacht detailing",
   "captain services",
-  "brokerage yacht preparation",
-  "South Florida yacht management",
+  "yacht brokerage preparation",
 ] as const;
 
 export const siteConfig = {
   name: siteName,
+  shortName: company.shortName,
   url: siteUrl,
   description: defaultDescription,
   keywords: [...targetKeywords],
   locale: "en_US",
-  email: "info@anzaloneyacht.com",
-  telephone: undefined as string | undefined,
+  email: company.email,
+  get telephone() {
+    return publicPhone();
+  },
   ogImagePath: "/opengraph-image",
+  logoPath: company.brandMark.src,
   twitterHandle: undefined as string | undefined,
-} as const;
+};
 
 export type PageMetadataInput = {
-  /** Short page title (layout template appends site name unless absoluteTitle is set) */
   title: string;
   description: string;
-  /** Path including leading slash, e.g. `/yacht-management` */
   path: string;
-  /** Extra keywords for this page only */
   keywords?: string[];
-  /** Use for homepage to avoid double branding in `<title>` */
   absoluteTitle?: string;
   noIndex?: boolean;
 };
@@ -56,9 +65,6 @@ function ogImageUrl(): string {
   return `${siteConfig.url}${siteConfig.ogImagePath}`;
 }
 
-/**
- * Consistent Next.js Metadata with Open Graph, Twitter, and canonical URL.
- */
 export function buildPageMetadata(input: PageMetadataInput): Metadata {
   const {
     title,
@@ -70,14 +76,14 @@ export function buildPageMetadata(input: PageMetadataInput): Metadata {
   } = input;
 
   const canonical = pageUrl(path);
-  const ogTitle = absoluteTitle ?? `${title} | ${siteName}`;
+  const ogTitle = absoluteTitle ?? `${title} | ${company.shortName}`;
   const documentTitle = absoluteTitle ? { absolute: absoluteTitle } : title;
 
   const image = {
     url: ogImageUrl(),
     width: 1200,
     height: 630,
-    alt: `${siteName} — owner-operated yacht management`,
+    alt: `${siteName} — ${company.logoTagline}`,
   };
 
   return {
@@ -118,29 +124,31 @@ export function buildPageMetadata(input: PageMetadataInput): Metadata {
 }
 
 export const homeMetadata = buildPageMetadata({
-  absoluteTitle:
-    "Anzalone Yacht Management | South Florida, Annapolis & Chesapeake Yacht Management",
+  absoluteTitle: `${company.shortName} | ${company.logoTagline}`,
   title: siteName,
-  description:
-    "Owner-operated yacht management, yacht maintenance, detailing, and captain services in South Florida, Annapolis, and the Chesapeake. Brokerage yacht preparation and vessel readiness — one accountable operator.",
+  description: defaultDescription,
   path: "/",
   keywords: [
     "owner-operated yacht management",
+    "Pauly Anzalone",
     "vessel readiness",
-    "yacht management Florida",
   ],
 });
 
 export const aboutMetadata = buildPageMetadata({
-  title: "About",
+  title: "About Pauly Anzalone",
   description:
-    "Meet the owner-operator behind Anzalone Yacht Management — accountable yacht management, maintenance oversight, and the readiness standard for South Florida, Annapolis, and Chesapeake programs.",
+    "Meet Pauly Anzalone — owner-operator of Anzalone's Full Service Yacht Management Group. Naples, Italy heritage, a merchant-marine family tradition, and 22 years of hands-on yacht care.",
   path: "/about",
+  keywords: [
+    "Pauly Anzalone",
+    "owner-operated yacht management",
+    "yacht management company",
+  ],
 });
 
 export const contactMetadata = buildPageMetadata({
-  title: "Contact — Request Vessel Review",
-  description:
-    "Request a confidential vessel review for yacht management, maintenance, detailing, captain services, or brokerage yacht preparation. Personal response within one business day.",
+  title: "Contact",
+  description: `Request a vessel review with Anzalone's. Call ${company.phone} or email ${company.email}. Owner-operated yacht management in South Florida and the Chesapeake region.`,
   path: "/contact",
 });

@@ -1,7 +1,14 @@
-import { siteConfig, siteName, siteUrl } from "@/lib/seo";
+import { publicPhone, serviceAreas, verifiedSocialLinks } from "@/lib/company";
 import { siteRoutes } from "@/lib/navigation";
+import { siteConfig, siteName, siteUrl } from "@/lib/seo";
 
 const serviceCatalog = [
+  {
+    name: "Field Services",
+    url: `${siteUrl}${siteRoutes.fieldServices}`,
+    description:
+      "Dockside field service — washdowns, systems checks, detailing, and yard presence.",
+  },
   {
     name: "Yacht Management",
     url: `${siteUrl}${siteRoutes.yachtManagement}`,
@@ -34,67 +41,68 @@ const serviceCatalog = [
   },
 ];
 
-/** JSON-LD for LocalBusiness + ProfessionalService (yacht management) */
+export type BreadcrumbItem = {
+  name: string;
+  path: string;
+};
+
+/** BreadcrumbList JSON-LD from confirmed site paths only. */
+export function getBreadcrumbSchema(items: BreadcrumbItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: `${siteUrl}${item.path === "/" ? "" : item.path}`,
+    })),
+  };
+}
+
+/**
+ * Organization / ProfessionalService JSON-LD.
+ * No ratings, reviews, street address, or priced Offers — only confirmed facts.
+ */
 export function getLocalBusinessSchema() {
+  const phone = publicPhone();
+  const sameAs = verifiedSocialLinks().map((link) => link.href);
+
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["LocalBusiness", "ProfessionalService"],
+        "@type": ["Organization", "ProfessionalService"],
         "@id": `${siteUrl}/#organization`,
         name: siteName,
         url: siteUrl,
         description: siteConfig.description,
         email: siteConfig.email,
+        ...(phone ? { telephone: phone } : {}),
+        ...(sameAs.length > 0 ? { sameAs } : {}),
         image: `${siteUrl}/opengraph-image`,
-        priceRange: "$$$",
-        areaServed: [
-          {
-            "@type": "Place",
-            name: "South Florida",
-            description: "South Florida yacht management — Palm Beach through the Keys",
-          },
-          {
-            "@type": "Place",
-            name: "Annapolis, Maryland",
-            description: "Yacht management Annapolis and Chesapeake Bay programs",
-          },
-          {
-            "@type": "Place",
-            name: "Chesapeake Bay",
-            description: "Chesapeake yacht management and East Coast dockside programs",
-          },
-          {
-            "@type": "Place",
-            name: "Bahamas & Caribbean",
-          },
-          {
-            "@type": "Place",
-            name: "U.S. East Coast",
-          },
-        ],
-        serviceType: [
-          "Yacht Management",
-          "Yacht Maintenance",
-          "Yacht Detailing",
-          "Captain Services",
-          "Brokerage Yacht Preparation",
-          "Refit Oversight",
-        ],
+        areaServed: serviceAreas.map((area) => ({
+          "@type": "AdministrativeArea",
+          name: area.name,
+        })),
+        serviceType: serviceCatalog.map((service) => service.name),
         knowsAbout: [
           "yacht management",
           "yacht maintenance",
           "yacht detailing",
+          "fiberglass repair",
+          "marine electronics",
           "captain services",
+          "yacht refit oversight",
           "brokerage yacht preparation",
         ],
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "Yacht Management Services",
+          name: "Yacht management services",
           itemListElement: serviceCatalog.map((service, index) => ({
-            "@type": "Offer",
+            "@type": "ListItem",
             position: index + 1,
-            itemOffered: {
+            item: {
               "@type": "Service",
               name: service.name,
               url: service.url,
