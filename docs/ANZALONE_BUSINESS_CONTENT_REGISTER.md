@@ -11,7 +11,9 @@ Source of truth for published business facts on the new site. Last reconciled ag
 | Descriptor | Full Service Yacht Management Group | Published |
 | Logo tagline | Premium Yacht Care & Maintenance | Published |
 | Homepage headline | Ready before you arrive. | Preserved |
-| Official logo | `public/brand/anzalone-official-logo.png` (750×300) | Published in header/footer; favicon via `src/app/icon.png` |
+| Official logo (master) | `public/brand/anzalone-official-logo.png` (750×300) | Unmodified brand reference |
+| Website wordmark | `public/brand/anzalone-logo-wordmark.png` (472×180) | Header/footer — A, waves, ANZALONE'S only |
+| Symbol / favicon | `public/brand/anzalone-logo-mark.png` + `src/app/icon.png` | A + waves for small icons |
 
 ## Contact
 

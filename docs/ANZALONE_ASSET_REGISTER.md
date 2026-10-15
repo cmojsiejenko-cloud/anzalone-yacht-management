@@ -1,12 +1,26 @@
 # Anzalone Asset Register
 
-**Date:** 14 October 2026  
-**Updated by:** Agent 03 — cinematic media  
+**Date:** 15 October 2026  
+**Updated by:** Premium logo refinement  
 **Image root:** `public/images/`  
+**Brand root:** `public/brand/`  
 **Registry:** `src/lib/images.ts`  
 **Sequence:** `src/lib/media.ts`  
 **Player:** `src/components/media/CinematicBackground.tsx`  
 **Renderer:** `src/components/ui/images/ResponsiveImage.tsx`
+
+## Brand marks
+
+| File | Role | Pixels | Notes |
+|------|------|-------:|-------|
+| `anzalone-official-logo.png` | Master reference (unmodified) | 750×300 | Full lockup with descriptor + tagline — not used in the header |
+| `anzalone-logo-wordmark.png` | Website header / footer | 472×180 | Cropped original: gold A, waves, ANZALONE'S only |
+| `anzalone-logo-mark.png` | Symbol | 318×318 | Original A + waves on navy |
+| `anzalone-logo-mark-512.png` | Large symbol | 512×512 | App / share icon source |
+| `anzalone-favicon-32.png` | Favicon source | 32×32 | Small icon |
+| `src/app/icon.png` | Next.js app icon | 192×192 | Served as site favicon |
+
+This is a visual simplification for navigation, not a company rename. Full legal / SEO name remains in `company.name` / structured data.
 
 Pixel sizes were read with `sharp` after the files were written. Production `next/image` is configured for AVIF and WebP (`next.config.ts`). Those variants are generated on request. They are not stored as extra files. Static export (`STATIC_EXPORT=1`) serves the JPEG unoptimized.
 

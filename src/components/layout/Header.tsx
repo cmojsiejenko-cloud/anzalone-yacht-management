@@ -297,7 +297,7 @@ export function Header() {
       <div className="site-header__frost" aria-hidden />
       <div
         ref={barRef}
-        className="site-header__bar container-wide flex items-center justify-between gap-5 px-5 py-3.5 sm:px-8 lg:gap-8 lg:px-10 xl:px-12"
+        className="site-header__bar container-wide flex items-center justify-between gap-4 px-5 py-3 sm:gap-5 sm:px-8 sm:py-3.5 lg:gap-8 lg:px-10 xl:px-12"
       >
         <BrandLogo light={light} compact />
 

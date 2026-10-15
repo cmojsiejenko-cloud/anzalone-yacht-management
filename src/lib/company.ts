@@ -54,7 +54,25 @@ export const company = {
       envText("NEXT_PUBLIC_FOUNDER_BIO") ??
       "Pauly Anzalone leads an owner-operated yacht management practice built on 22 years of hands-on experience. With family roots in Naples, Italy, and a father who served as a merchant marine captain, his approach is grounded in seamanship, craftsmanship, and personal accountability.",
   },
+  /**
+   * Website navigation lockup — original A, waves, and ANZALONE'S wordmark only.
+   * Cropped from the official master; does not rename the company.
+   */
   brandMark: {
+    src: "/brand/anzalone-logo-wordmark.png" as const,
+    width: 472,
+    height: 180,
+    alt: "Anzalone's",
+  },
+  /** Symbol-only (A + waves) for favicon / small icons */
+  brandSymbol: {
+    src: "/brand/anzalone-logo-mark.png" as const,
+    width: 318,
+    height: 318,
+    alt: "Anzalone's mark",
+  },
+  /** Unmodified official artwork — master brand reference (not used in the header) */
+  brandMarkMaster: {
     src: "/brand/anzalone-official-logo.png" as const,
     width: 750,
     height: 300,

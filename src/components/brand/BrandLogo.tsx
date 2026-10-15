@@ -8,8 +8,8 @@ type BrandLogoProps = {
   /** Transparent header over photography */
   light?: boolean;
   /**
-   * Header bar treatment — slightly taller than the old compact mark so the
-   * official lockup reads clearly without making the bar feel heavy.
+   * Header bar treatment — wordmark lockup sized for a premium nav bar
+   * without crowding phone / Inquire controls.
    * Omit for footer and other roomy placements.
    */
   compact?: boolean;
@@ -40,15 +40,17 @@ export function BrandLogo({
         height={company.brandMark.height}
         priority
         className={cn(
-          "w-auto max-w-[min(100%,11.5rem)] object-contain object-left sm:max-w-[min(100%,13.5rem)]",
+          "w-auto object-contain object-left",
           compact
-            ? "h-11 sm:h-[3.25rem] lg:h-14 lg:max-w-[15rem]"
-            : "h-12 sm:h-14 lg:h-16 lg:max-w-[16.5rem]",
+            ? // Header: tall enough for a clear ANZALONE'S wordmark; capped so nav stays balanced
+              "h-[3.15rem] max-w-[min(100%,10.75rem)] sm:h-[3.45rem] sm:max-w-[12.25rem] lg:h-14 lg:max-w-[13.5rem]"
+            : // Footer / roomy: slightly larger, still the simplified lockup
+              "h-[3.5rem] max-w-[min(100%,12rem)] sm:h-16 sm:max-w-[14rem] lg:h-[4.25rem] lg:max-w-[15.5rem]",
         )}
         sizes={
           compact
-            ? "(max-width: 640px) 176px, (max-width: 1024px) 208px, 240px"
-            : "(max-width: 640px) 180px, 260px"
+            ? "(max-width: 640px) 172px, (max-width: 1024px) 196px, 216px"
+            : "(max-width: 640px) 192px, 248px"
         }
       />
     </span>
