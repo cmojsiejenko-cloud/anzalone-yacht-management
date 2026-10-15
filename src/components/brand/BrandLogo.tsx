@@ -39,18 +39,19 @@ export function BrandLogo({
         width={company.brandMark.width}
         height={company.brandMark.height}
         priority
+        unoptimized
         className={cn(
           "w-auto object-contain object-left",
           compact
-            ? // Header: tall enough for a clear ANZALONE'S wordmark; capped so nav stays balanced
-              "h-[3.15rem] max-w-[min(100%,10.75rem)] sm:h-[3.45rem] sm:max-w-[12.25rem] lg:h-14 lg:max-w-[13.5rem]"
-            : // Footer / roomy: slightly larger, still the simplified lockup
-              "h-[3.5rem] max-w-[min(100%,12rem)] sm:h-16 sm:max-w-[14rem] lg:h-[4.25rem] lg:max-w-[15.5rem]",
+            ? // Header: gold lockup clear, but narrow enough to leave the nav and menu controls alone
+              "h-[3.25rem] max-w-[min(100%,9.4rem)] sm:h-[3.5rem] sm:max-w-[10.5rem] lg:h-[3.65rem] lg:max-w-[11.25rem] xl:h-16 xl:max-w-[12.75rem]"
+            : // Footer on navy: same transparent lockup, with a little more presence
+              "h-[3.65rem] max-w-[min(100%,11rem)] sm:h-16 sm:max-w-[13rem] lg:h-[4.5rem] lg:max-w-[15rem]",
         )}
         sizes={
           compact
-            ? "(max-width: 640px) 172px, (max-width: 1024px) 196px, 216px"
-            : "(max-width: 640px) 192px, 248px"
+            ? "(max-width: 640px) 150px, (max-width: 1280px) 180px, 204px"
+            : "(max-width: 640px) 176px, 240px"
         }
       />
     </span>
@@ -61,7 +62,7 @@ export function BrandLogo({
   return (
     <Link
       href={siteRoutes.home}
-      className="group shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+      className="group inline-flex shrink-0 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
       aria-label={`${company.shortName} — home`}
     >
       {mark}

@@ -141,21 +141,9 @@
   }
 }
 
-/* Website wordmark lockup — preserve aspect; no stretch or recolor */
+/* Transparent gold lockup — preserve aspect; no plate, shadow, or recolor */
 .brand-logo img {
   display: block;
-}
-
-.brand-logo--header img {
-  /* Soft lift so the navy field reads on ivory and over bright hero plates */
-  filter: drop-shadow(0 1px 2px rgba(6, 13, 24, 0.2));
-  border-radius: 1px;
-}
-
-.brand-logo--on-dark img {
-  /* Lockup already includes navy field + gold A / wordmark */
-  filter: drop-shadow(0 1px 3px rgba(6, 13, 24, 0.38));
-  border-radius: 1px;
 }
 
 /* ─── Typography scale ───────────────────────────────────────────────────── */
@@ -907,7 +895,7 @@
     }
 
     .site-header.is-solid .header-phone-icon:hover {
-      color: var(--color-gold-muted);
+      color: var(--color-gold-light);
     }
   }
 
@@ -1025,18 +1013,18 @@
     color: var(--color-ivory);
     background: linear-gradient(
       to bottom,
-      rgba(6, 13, 24, 0.72) 0%,
-      rgba(6, 13, 24, 0.36) 68%,
-      transparent 100%
+      rgba(6, 13, 24, 0.84) 0%,
+      rgba(6, 13, 24, 0.52) 62%,
+      rgba(6, 13, 24, 0.08) 100%
     );
     border-bottom: 1px solid transparent;
   }
 
   .site-header.is-solid {
-    color: var(--color-navy-900);
-    background: rgba(247, 244, 239, 0.96);
-    border-bottom: 1px solid rgba(212, 207, 196, 0.9);
-    box-shadow: var(--shadow-header);
+    color: var(--color-ivory);
+    background: rgba(6, 13, 24, 0.94);
+    border-bottom: 1px solid rgba(219, 196, 138, 0.18);
+    box-shadow: 0 12px 32px rgba(6, 13, 24, 0.28);
   }
 
   /* Blur lives on a sibling layer so it never traps position:fixed menu */

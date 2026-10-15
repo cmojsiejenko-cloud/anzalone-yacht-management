@@ -202,7 +202,9 @@ export function Header() {
   const mobileMenuId = useId();
   const phone = publicPhone();
 
-  const light = !scrolled && !menuOpen;
+  const solidBar = scrolled || menuOpen;
+  // The bar stays a dark field in every state so the transparent gold mark remains legible.
+  const light = true;
 
   useEffect(() => {
     setMenuOpen(false);
@@ -292,7 +294,7 @@ export function Header() {
   return (
     <header
       ref={headerRef}
-      className={cn("site-header", light ? "is-transparent" : "is-solid")}
+      className={cn("site-header", solidBar ? "is-solid" : "is-transparent")}
     >
       <div className="site-header__frost" aria-hidden />
       <div
