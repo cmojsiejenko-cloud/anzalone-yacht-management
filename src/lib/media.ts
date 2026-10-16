@@ -1,11 +1,9 @@
 import { siteImages, type SiteImageDefinition } from "@/lib/images";
 
 /**
- * Homepage still sequence. There is no approved motion footage in this repo.
- * `CinematicBackground` dissolves these plates when `heroVideoSrc` is null.
- * A real file at `public/video/hero.mp4` replaces that dissolve.
- * Leave `heroVideoSrc` null until that file is in the repository.
- * Do not point it at a slideshow exported from these stills.
+ * Homepage still sequence. These plates stay the immediate hero and the
+ * fallback when video cannot play, motion is reduced, or data saving is on.
+ * The cinematic reel is pre-assembled. The browser never requests the source clips.
  */
 export const heroSequence: readonly SiteImageDefinition[] = [
   siteImages.cruise,
@@ -15,4 +13,8 @@ export const heroSequence: readonly SiteImageDefinition[] = [
   siteImages.departure,
 ];
 
-export const heroVideoSrc = null as "/video/hero.mp4" | null;
+export const heroVideo = {
+  desktop: "/video/anzalone-hero-desktop.mp4",
+  mobile: "/video/anzalone-hero-mobile.mp4",
+  poster: "/video/anzalone-hero-poster.webp",
+} as const;

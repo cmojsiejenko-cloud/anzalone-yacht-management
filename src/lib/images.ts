@@ -4,9 +4,8 @@
  * Drop final photography into `public/images/` using the filenames below.
  * Set `usePlaceholder: false` on each entry once the real file is in place.
  *
- * Homepage motion is the still sequence in `src/lib/media.ts`.
- * A real file at `public/video/hero.mp4` is optional and is not present.
- * Do not point `heroVideoSrc` at a file that is not in `public/video/`.
+ * Homepage motion is the still sequence in `src/lib/media.ts`, replaced by the
+ * assembled reel in `public/video/` when playback is allowed.
  */
 
 export type ImageOverlayVariant =

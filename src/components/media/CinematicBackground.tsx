@@ -14,11 +14,24 @@ const WATCH_MS = 400;
 /** Arm the next plate even if the poster's load event is missed. */
 const PRELOAD_FALLBACK_MS = 2500;
 
+type HeroVideo = {
+  desktop: string;
+  mobile: string;
+  poster: string;
+};
+
 type CinematicBackgroundProps = {
   frames: readonly SiteImageDefinition[];
-  /** Public path such as `/video/hero.mp4`. Omit until the file exists. */
-  videoSrc?: string | null;
+  /** Pre-assembled reel. Omit to keep the still sequence. */
+  video?: HeroVideo | null;
   priority?: boolean;
+};
+
+type NetworkInformation = {
+  saveData?: boolean;
+  effectiveType?: string;
+  addEventListener?: (type: string, listener: () => void) => void;
+  removeEventListener?: (type: string, listener: () => void) => void;
 };
 
 type FrameRole = "outgoing" | "live" | "preload";
@@ -32,14 +45,25 @@ function visibleVariant(
   return "desktop";
 }
 
+function prefersStillHero() {
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedData = window.matchMedia("(prefers-reduced-data: reduce)").matches;
+  const connection = (
+    navigator as Navigator & { connection?: NetworkInformation }
+  ).connection;
+  const slowNetwork =
+    connection?.effectiveType === "slow-2g" || connection?.effectiveType === "2g";
+  return motion || reducedData || Boolean(connection?.saveData) || Boolean(slowNetwork);
+}
+
 export function CinematicBackground({
   frames,
-  videoSrc = null,
+  video = null,
   priority = false,
 }: CinematicBackgroundProps) {
   const [index, setIndex] = useState(0);
   const [outgoing, setOutgoing] = useState<number | null>(null);
-  const [reduceMotion, setReduceMotion] = useState(false);
+  const [holdStill, setHoldStill] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [posterReady, setPosterReady] = useState(false);
@@ -52,11 +76,21 @@ export function CinematicBackground({
 
   useEffect(() => {
     setMounted(true);
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => setReduceMotion(media.matches);
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const data = window.matchMedia("(prefers-reduced-data: reduce)");
+    const connection = (
+      navigator as Navigator & { connection?: NetworkInformation }
+    ).connection;
+    const apply = () => setHoldStill(prefersStillHero());
     apply();
-    media.addEventListener("change", apply);
-    return () => media.removeEventListener("change", apply);
+    motion.addEventListener("change", apply);
+    data.addEventListener("change", apply);
+    connection?.addEventListener?.("change", apply);
+    return () => {
+      motion.removeEventListener("change", apply);
+      data.removeEventListener("change", apply);
+      connection?.removeEventListener?.("change", apply);
+    };
   }, []);
 
   useEffect(() => {
@@ -65,8 +99,8 @@ export function CinematicBackground({
     return () => window.clearTimeout(timer);
   }, [mounted]);
 
-  const playVideo = Boolean(videoSrc) && mounted && !reduceMotion && !videoFailed;
-  const playStills = mounted && !reduceMotion && !playVideo && frames.length > 1;
+  const playVideo = Boolean(video) && mounted && !holdStill && !videoFailed;
+  const playStills = mounted && !holdStill && !playVideo && frames.length > 1;
 
   const markLoaded = useCallback(
     (frameIndex: number, variant: "mobile" | "desktop") => {
@@ -104,7 +138,7 @@ export function CinematicBackground({
 
   if (!poster) return null;
 
-  const activeIndex = reduceMotion || !mounted ? 0 : index;
+  const activeIndex = holdStill || !mounted ? 0 : index;
   const nextIndex =
     playStills && posterReady && frames.length > 1
       ? (activeIndex + 1) % frames.length
@@ -146,37 +180,67 @@ export function CinematicBackground({
           </div>
         );
       })}
-      {playVideo && videoSrc ? (
-        <HeroReel src={videoSrc} poster={poster.src} onFail={failVideo} />
+      {playVideo && video ? (
+        <HeroReel
+          desktop={video.desktop}
+          mobile={video.mobile}
+          poster={video.poster}
+          onFail={failVideo}
+        />
       ) : null}
     </div>
   );
 }
 
 function HeroReel({
-  src,
+  desktop,
+  mobile,
   poster,
   onFail,
 }: {
-  src: string;
+  desktop: string;
+  mobile: string;
   poster: string;
   onFail: () => void;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [src, setSrc] = useState<string | null>(null);
+  const [shownSrc, setShownSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 1024px)");
+    const apply = () => setSrc(wide.matches ? desktop : mobile);
+    apply();
+    wide.addEventListener("change", apply);
+    return () => wide.removeEventListener("change", apply);
+  }, [desktop, mobile]);
 
   useEffect(() => {
     const video = ref.current;
-    if (!video) return;
+    if (!video || !src) return;
     video.muted = true;
     video.defaultMuted = true;
+    video.setAttribute("playsinline", "");
     const attempt = video.play();
-    if (attempt) attempt.catch(() => onFail());
+    if (attempt) {
+      attempt.catch((error: unknown) => {
+        const name = error instanceof DOMException ? error.name : "";
+        if (name === "AbortError") return;
+        onFail();
+      });
+    }
   }, [src, onFail]);
+
+  if (!src) return null;
 
   return (
     <video
+      key={src}
       ref={ref}
-      className="cinematic-video absolute inset-0 z-[1] h-full w-full object-cover"
+      className={cn(
+        "cinematic-video pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover",
+        shownSrc === src && "is-playing",
+      )}
       autoPlay
       muted
       loop
@@ -185,6 +249,7 @@ function HeroReel({
       poster={poster}
       disablePictureInPicture
       controls={false}
+      onPlaying={() => setShownSrc(src)}
       onError={onFail}
     >
       <source src={src} type="video/mp4" />

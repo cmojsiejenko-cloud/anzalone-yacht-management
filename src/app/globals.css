@@ -460,13 +460,19 @@
   }
 
   .cinematic-video {
-    object-position: center 42%;
+    object-position: center center;
+    opacity: 0;
+    transition: opacity 650ms ease;
+  }
+
+  .cinematic-video.is-playing {
+    opacity: 1;
   }
 
   @media (min-width: 1024px) {
     .cinematic-still,
     .cinematic-video {
-      object-position: center 44%;
+      object-position: center 46%;
     }
   }
 
@@ -517,15 +523,21 @@
     position: absolute;
     inset: 0;
     z-index: 15;
-    background: linear-gradient(
-      to top,
-      rgba(6, 13, 24, 0.94) 0%,
-      rgba(6, 13, 24, 0.9) 18%,
-      rgba(6, 13, 24, 0.82) 36%,
-      rgba(6, 13, 24, 0.7) 54%,
-      rgba(6, 13, 24, 0.28) 68%,
-      transparent 80%
-    );
+    background:
+      linear-gradient(
+        90deg,
+        rgba(6, 13, 24, 0.55) 0%,
+        rgba(6, 13, 24, 0.22) 46%,
+        transparent 72%
+      ),
+      linear-gradient(
+        to top,
+        rgba(6, 13, 24, 0.92) 0%,
+        rgba(6, 13, 24, 0.78) 20%,
+        rgba(6, 13, 24, 0.4) 40%,
+        rgba(6, 13, 24, 0.08) 58%,
+        transparent 72%
+      );
   }
 
   @media (min-width: 1024px) {
@@ -1251,7 +1263,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cinematic-frame,
-  .cinematic-still {
+  .cinematic-still,
+  .cinematic-video {
     transition: none !important;
     animation: none !important;
     transform: none !important;

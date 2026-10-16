@@ -19,10 +19,14 @@ type PageHeroProps = {
   contentClassName?: string;
   /** Optional full-bleed background — final file at public/images/[filename] */
   backgroundImage?: SiteImageDefinition;
-  /** Still sequence, replaced by video when `videoSrc` points at a real file. */
+  /** Still sequence, replaced by the assembled reel when playback is allowed. */
   film?: {
     frames: readonly SiteImageDefinition[];
-    videoSrc?: string | null;
+    video?: {
+      desktop: string;
+      mobile: string;
+      poster: string;
+    } | null;
   };
   backgroundOverlay?: ImageOverlayVariant;
 };
@@ -64,7 +68,7 @@ export function PageHero({
           {hasFilm && film ? (
             <CinematicBackground
               frames={film.frames}
-              videoSrc={film.videoSrc}
+              video={film.video}
               priority
             />
           ) : (

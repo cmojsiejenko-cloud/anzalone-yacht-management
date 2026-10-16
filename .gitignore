@@ -20,6 +20,8 @@
 
 # misc
 .DS_Store
+.tmp-hero-inspect/
+.tmp-hero-build/
 *.pem
 
 # debug

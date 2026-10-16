@@ -72,22 +72,18 @@ The generator’s output ceiling for these frames was 1280×720. `next/image` do
 
 ## Playback
 
-Updated 15 October 2026. There is still no video file and no video-generation tool. The homepage is a still sequence, not a completed reel.
+The homepage hero plays a pre-assembled silent reel when motion and data settings allow it.
 
-`CinematicBackground` dissolves the five homepage frames about every 7.8 seconds (about 39 seconds for the loop) with a 1.8 second crossfade and a 4.5% scale drift. The next frame is not shown until that file has decoded. Below 1024px the player uses the vertical crop. From 1024px up it uses the wide frame. Only the live frame and the next plate are mounted, so the first still can stay the LCP image.
+- Desktop: `public/video/anzalone-hero-desktop.mp4` (1280×720, H.264, no audio)
+- Mobile, below 1024px: `public/video/anzalone-hero-mobile.mp4` (540×960, H.264, no audio)
+- Poster: `public/video/anzalone-hero-poster.webp`
+- Source clips stay in `assets/hero-video-sources/` and are not requested by the browser
+- `muted`, `loop`, `playsInline`, `preload="metadata"`, no controls
+- `prefers-reduced-motion`, `prefers-reduced-data`, save-data, and 2g keep the first still and do not mount the video
+- A video error, or a rejected `play()`, drops back to the still sequence
+- Homepage type sits on `.hero-film-scrim` (and a text-column veil from 1024px up)
 
-It is muted-capable video when a file exists:
-
-- `heroVideoSrc` in `src/lib/media.ts` is `null`
-- Expected file, when the owner has one: `public/video/hero.mp4`
-- `muted`, `loop`, `playsInline`, `preload="metadata"`, poster set to the first still
-- No audio. No controls over the headline
-- `prefers-reduced-motion: reduce` shows the first still only and does not mount the video
-- A video error, or a rejected `play()`, drops back to the stills
-- Homepage type sits on `.hero-film-scrim` (and a text-column veil from 1024px up). Service heroes still use `.hero-photo-scrim`
-- Headline and CTAs are painted immediately. They do not wait on a fade-in
-
-`public/video/.gitkeep` holds the folder. There is no mp4.
+`CinematicBackground` still dissolves the five homepage plates when video is not playing.
 
 ## Missing video — generation-ready shot list
 
@@ -100,7 +96,7 @@ It is muted-capable video when a file exists:
 5. **Craft (about 5s).** Close pass across polished gelcoat, a stainless cleat, and teak. Hands only if needed. No face.
 6. **Departure (about 6s).** Stern leaving the marina for open water. End on the horizon.
 
-Deliver `public/video/hero.mp4`, H.264, no audio track, 1920×1080 or wider, and set `heroVideoSrc` to `"/video/hero.mp4"`. Until that file is in the repo, leave the constant `null`.
+The supplied clips are assembled by `scripts/build-hero-reel.mjs` into the files above. Do not point the player at the four source files.
 
 ## Truck specification — not generated
 
