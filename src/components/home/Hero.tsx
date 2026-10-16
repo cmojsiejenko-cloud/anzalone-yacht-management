@@ -6,7 +6,6 @@ import { siteRoutes } from "@/lib/navigation";
 export function Hero() {
   return (
     <PageHero
-      eyebrow="Anzalone's · Full Service Yacht Management"
       title="Ready before you arrive."
       description="One person is accountable for the care of the yacht. Maintenance, coordination, and preparation are handled. You arrive, and the water is yours to enjoy."
       minHeight="tall"

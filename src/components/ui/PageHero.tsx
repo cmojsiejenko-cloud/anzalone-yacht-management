@@ -135,7 +135,7 @@ export function PageHero({
           <LuxuryDivider
             variant="rule"
             className={cn(
-              hasFilm ? "mb-6" : "mb-8",
+              eyebrow ? (hasFilm ? "mb-6" : "mb-8") : "mb-4",
               isCenter && "justify-center",
             )}
           />
@@ -145,7 +145,7 @@ export function PageHero({
           <h1
             className={cn(
               "hero-headline max-w-3xl type-display-xl text-ivory text-balance",
-              hasFilm ? "mt-5" : "mt-6",
+              eyebrow ? (hasFilm ? "mt-5" : "mt-6") : "mt-0",
               isCenter && "mx-auto",
             )}
           >
